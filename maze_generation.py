@@ -131,13 +131,19 @@ def scatter_points(maze, start, goal, level, target_score):
         total_score = 0
         a, b, c, d = distribute_points(size_path, target_score)
 
-        """ 🔹 Gán điểm vào đường đi BFS """
+        # Bỏ start và goal ra khỏi path
+        middle_path = path[1:-1]
+
+        # Chọn ngẫu nhiên size_path ô trong số đó
+        selected_positions = random.sample(middle_path, k=size_path)
+
+        # Chuẩn bị danh sách điểm đã được phân phối và xáo trộn
         number_point = [-100] * a + [100] * b + [200] * c + [500] * d
         random.shuffle(number_point)
 
-        for i, (x, y) in enumerate(path[1:size_path+1]):  # Bỏ ô Start
-            if (x, y) != start and (x, y) != goal:
-                scattered_point[(x, y)] = number_point[i]
+        # Gán điểm vào các vị trí đã chọn
+        for i, (x, y) in enumerate(selected_positions):
+            scattered_point[(x, y)] = number_point[i]
 
         """ 🔹 Rải điểm trên toàn bản đồ nhưng với xác suất `>= 0.95` """
         for x, y in all_path:
