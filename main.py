@@ -7,6 +7,10 @@ from ui import *
 from maze_generation import *
 from colors_and_fonts import BLACK
 
+from player_movement import move_player
+from Easy import *
+
+
 pygame.init()  # Khởi tạo Pygame
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.FULLSCREEN)  # Thiết lập cửa sổ game ở chế độ full screen
 clock = pygame.time.Clock()  # Tạo đối tượng clock để điều khiển FPS
@@ -17,6 +21,7 @@ def main():
     running = True
     # Vòng lặp chính của game
     while running:
+
         clock.tick(30)  # Đặt FPS cho game (30 FPS)
         blink_state = (pygame.time.get_ticks() // 500) % 2  # Định kỳ cập nhật trạng thái nhấp nháy
         if play == True:
@@ -37,7 +42,6 @@ def main():
             
             screen.fill(BLACK)
             draw_maze_AI(screen, state.maze, PLAYER_POS, BORDER_COLOR_PLAYER, CELL_SIZE_PLAYER)
-        
         pygame.display.flip()  # Cập nhật màn hình
     
 

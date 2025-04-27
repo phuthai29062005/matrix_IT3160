@@ -13,7 +13,7 @@ PERCENT = percent_data["percent"]
 GRID_SIZE = 70  # Kích thước mê cung
 
 def find_shortest_path(maze, start, goal):
-    """Tìm đường đi ngắn nhất từ start đến goal bằng BFS"""
+    # tìm đường đi ngắn nhất bằng BFS
     queue = deque([(start, [start])])
     visited = set()
 
@@ -28,8 +28,8 @@ def find_shortest_path(maze, start, goal):
                 visited.add((nx, ny))
                 queue.append(((nx, ny), path + [(nx, ny)]))
 
-    return []  # Nếu không có đường đi hợp lệ
-    
+    return []  # Nếu không có đường đi hợp lệ 
+
 def find_start_end(maze, current_level):
    
     path_cells = [(x, y) for x in range(GRID_SIZE) for y in range(GRID_SIZE) if maze[x][y] == 0]
@@ -102,6 +102,5 @@ def random_points(maze, start, goal, level):
     # Gán điểm vào các vị trí đã chọn
     for i, (x, y) in enumerate(selected_positions):
         point[(x, y)] = 1
-
     point_AI = point.copy()  # Đồng bộ điểm cho AI
     return point, point_AI
