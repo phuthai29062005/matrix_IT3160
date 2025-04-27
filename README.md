@@ -29,3 +29,4 @@ Người chơi sẽ điều khiển nhân vật di chuyển trong mê cung và t
 ### `colors_and_fonts.py`
 - Chứa màu sắc, font chữ của game.
 - Load thông tin từ file `colors.json`.
+
