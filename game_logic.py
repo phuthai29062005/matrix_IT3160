@@ -35,13 +35,7 @@ def update_ai(state):
     # Nếu không có đường đi hoặc đã đi hết đường đi
     if not state.ai_path or state.ai_pos == state.goal_pos:
         # Tìm đường đi mới
-        state.ai_path = find_shortest_path(state.maze, state.ai_pos, state.goal_pos)
-        
-        # Nếu không tìm thấy đường đi
-        if not state.ai_path:
-            print("Không tìm thấy đường đi cho AI!")
-            return
-    
+        state.ai_path = find_shortest_path(state.maze, state.ai_pos, state.goal_pos)    
     # Di chuyển AI
     state.ai_pos, state.ai_last_move_time = move_ai(
         state.maze, 
