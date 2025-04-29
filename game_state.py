@@ -22,6 +22,19 @@ class GameState:
         self.win = False
         self.load_level()
 
+    def reset(self):
+        self.maze = None
+        self.start_pos = None
+        self.goal_pos = None
+        self.scattered_points = []
+        self.ai_scattered_points = []
+        self.collected_points = 0
+        self.ai_collected_points = 0
+        self.current_level = 0
+        self.target_score = 0
+        self.player_pos = None
+        self.ai_pos = None
+    
     def load_level(self):
         # Load dữ liệu cho level hiện tại
         idx = self.current_level - 1
