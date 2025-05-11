@@ -7,21 +7,18 @@ from ui import *
 def heuristic(a, b):
     return abs(a[0] - b[0]) + abs(a[1] - b[1])
 
-def BFS_solve(screen, maze, start, goal, scattered_points, pos, border_color, cell_size):
-
+def BFS_solve(screen, maze, pos, border_color, cell_size, start, goal, blink_state):
     queue = deque([start])
-    visited = {start: None}  # dùng dict để lưu cha
+    visited = {start: None}  # lưu đường đi 
     visited_cells = set()
     
     while queue:
         current = queue.popleft()
         visited_cells.add(current)
 
-        # Cập nhật maze: đánh dấu đã đi
-        maze[current[0]][current[1]] = 2  # Giả sử 2 là đường trắng
-
         # Vẽ lại màn hình
-        draw_maze(screen, maze, pos, border_color, cell_size, start, goal, current, current, visited_cells, scattered_points, blink_state=True)
+        draw_maze(screen, maze, pos, border_color, cell_size, start, goal, current, visited[current], visited_cells, set(), blink_state)
+        # set() rỗng vì không có điểm rải rác trong BFS
         pygame.display.update()
         pygame.time.delay(50)  # Delay 50ms cho đẹp mắt
 
@@ -31,7 +28,7 @@ def BFS_solve(screen, maze, start, goal, scattered_points, pos, border_color, ce
         # Duyệt các ô lân cận
         for dx, dy in [(1, 0), (0, 1), (-1, 0), (0, -1)]:
             neighbor = (current[0] + dx, current[1] + dy)
-            if 0 <= neighbor[0] < GRID_SIZE and 0 <= neighbor[1] < GRID_SIZE and maze[neighbor[0]][neighbor[1]] == 0 and neighbor not in visited:
+            if 0 <= neighbor[0] < GRID_SIZE and 0 <= neighbor[1] < GRID_SIZE and neighbor not in visited:
                 queue.append(neighbor)
                 visited[neighbor] = current
 
@@ -42,7 +39,7 @@ def BFS_solve(screen, maze, start, goal, scattered_points, pos, border_color, ce
         current = visited[current]
     return path[::-1] 
 
-def DFS_solve(screen, maze, start, goal, scattered_points, pos, border_color, cell_size):
+def DFS_solve(screen, maze, pos, border_color, cell_size, start, goal, blink_state):
     stack = [start]
     visited = {start: None}
     visited_cells = set()
@@ -50,17 +47,16 @@ def DFS_solve(screen, maze, start, goal, scattered_points, pos, border_color, ce
     while stack:
         current = stack.pop()
         visited_cells.add(current)
-        maze[current[0]][current[1]] = 2  # Giả sử 2 là đường trắng
 
-        draw_maze(screen, maze, pos, border_color, cell_size, start, goal, current, current, visited_cells, scattered_points, blink_state=True)
+        draw_maze(screen, maze, pos, border_color, cell_size, start, goal, current, visited[current], visited_cells, set(), blink_state)
         pygame.display.update()
-        pygame.time.delay(20)  # Delay 50ms cho đẹp mắt
+        pygame.time.delay(50)  # Delay 50ms cho đẹp mắt
         if current == goal:
             break
 
         for dx, dy in [(1, 0), (0, 1), (-1, 0), (0, -1)]:
             neighbor = (current[0] + dx, current[1] + dy)
-            if 0 <= neighbor[0] < GRID_SIZE and 0 <= neighbor[1] < GRID_SIZE and maze[neighbor[0]][neighbor[1]] == 0 and neighbor not in visited:
+            if 0 <= neighbor[0] < GRID_SIZE and 0 <= neighbor[1] < GRID_SIZE and neighbor not in visited:
                 stack.append(neighbor)
                 visited[neighbor] = current
 
@@ -72,7 +68,7 @@ def DFS_solve(screen, maze, start, goal, scattered_points, pos, border_color, ce
         current = visited[current]
     return path[::-1]
 
-def GreedyBestFirst_solve(screen, maze, start, goal, scattered_points, pos, border_color, cell_size):
+def GreedyBestFirst_solve(screen, maze, pos, border_color, cell_size, start, goal, blink_state):
     queue = PriorityQueue()
     queue.put((0, start))
     visited = {start: None}
@@ -81,16 +77,15 @@ def GreedyBestFirst_solve(screen, maze, start, goal, scattered_points, pos, bord
     while not queue.empty():
         _, current = queue.get()
         visited_cells.add(current)
-        maze[current[0]][current[1]] = 2
-        draw_maze(screen, maze, pos, border_color, cell_size, start, goal, current, current, visited_cells, scattered_points, blink_state=True)
+        draw_maze(screen, maze, pos, border_color, cell_size, start, goal, current, visited[current], visited_cells, set(), blink_state)
         pygame.display.update()
-        pygame.time.delay(20)  # Delay 50ms cho đẹp mắt
+        pygame.time.delay(50)  # Delay 50ms cho đẹp mắt
 
         if current == goal:
             break
         for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
             neighbor = (current[0] + dx, current[1] + dy)
-            if 0 <= neighbor[0] < GRID_SIZE and 0 <= neighbor[1] < GRID_SIZE and maze[neighbor[0]][neighbor[1]] == 0 and neighbor not in visited:
+            if 0 <= neighbor[0] < GRID_SIZE and 0 <= neighbor[1] < GRID_SIZE and neighbor not in visited:
                 priority = heuristic(neighbor, goal)
                 queue.put((priority, neighbor))
                 visited[neighbor] = current
@@ -102,7 +97,7 @@ def GreedyBestFirst_solve(screen, maze, start, goal, scattered_points, pos, bord
     return path[::-1]
 
 
-def A_star(screen, maze, start, goal, scattered_points, pos, border_color, cell_size):
+def A_star(screen, maze, pos, border_color, cell_size, start, goal, blink_state):
     queue = PriorityQueue()
     queue.put((0, start))
     visited = {start: None}
@@ -112,16 +107,15 @@ def A_star(screen, maze, start, goal, scattered_points, pos, border_color, cell_
     while not queue.empty():
         _, current = queue.get()
         visited_cells.add(current)
-        maze[current[0]][current[1]] = 2
-        draw_maze(screen, maze, pos, border_color, cell_size, start, goal, current, current, visited_cells, scattered_points, blink_state=True)
+        draw_maze(screen, maze, pos, border_color, cell_size, start, goal, current, visited[current], visited_cells, set(), blink_state)
         pygame.display.update()
-        pygame.time.delay(20)  # Delay 50ms cho đẹp mắt
+        pygame.time.delay(50)  # Delay 50ms cho đẹp mắt
 
         if current == goal:
             break
         for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
             neighbor = (current[0] + dx, current[1] + dy)
-            if 0 <= neighbor[0] < GRID_SIZE and 0 <= neighbor[1] < GRID_SIZE and maze[neighbor[0]][neighbor[1]] == 0 and neighbor not in visited:
+            if 0 <= neighbor[0] < GRID_SIZE and 0 <= neighbor[1] < GRID_SIZE and neighbor not in visited:
                 new_cost = cost[current] + 1
                 cost[neighbor] = new_cost
                 priority = new_cost + heuristic(neighbor, goal)
