@@ -120,7 +120,6 @@ def main():
         draw_headings(screen)
         draw_comments(screen)
         draw_maze(screen, maze, PLAYER_POS, BORDER_COLOR_PLAYER, CELL_SIZE_PLAYER, start_pos, goal_pos, player_pos, last_player_pos, visited_cells, scattered_points, blink_state)
-        #draw_maze(screen, maze, AI_POS, BORDER_COLOR_AI, CELL_SIZE_AI, start_pos, goal_pos, start_pos, start_pos, BFS(maze, start_pos, goal_pos), ai_scattered_points, blink_state)
         BFS_solve(screen, maze, player_pos, goal_pos, scattered_points, player_pos, BORDER_COLOR_PLAYER, CELL_SIZE_PLAYER)
         draw_score(screen, score, target_score)
         draw_exit_message(screen)
