@@ -13,11 +13,6 @@ def update_player(state, keys):
         state.score += state.scattered_points.pop(new_pos, 0)  # Cộng điểm nếu người chơi thu thập được điểm
         state.player_pos = new_pos  # Cập nhật vị trí người chơi
 
-
-import time
-from player_movement import move_player
-from maze_generation import find_shortest_path
-
 def move_ai(maze, ai_pos, goal_pos, ai_path, last_move_time, move_delay):
     current_time = time.time()
     

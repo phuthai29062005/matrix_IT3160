@@ -3,6 +3,7 @@ import copy
 import time
 from game_state import GameState
 from Easy import *
+from ui import *
 
 def choose_position(screen, state):
     for event in pygame.event.get():
@@ -44,22 +45,27 @@ def compare_maze(screen, state):
     maze_copy_for_greedy = copy.deepcopy(state.maze)
     maze_copy_for_Astar = copy.deepcopy(state.maze)
 
-    start = time.perf_counter()
-    DFS_path = BFS_solve(screen, maze_copy_for_bfs, state.start_pos, state.goal_pos, None, PLAYER_POS, BORDER_COLOR_PLAYER, CELL_SIZE_PLAYER)
-    end = time.perf_counter()
-    print(f"BFS thời gian: {end - start:.8f} giây")
+    # Tọa độ để hiển thị thời gian (bên phải màn hình)
+    time_display_x = SCREEN_WIDTH - 300  # Điều chỉnh vị trí theo nhu cầu
+    time_display_y_start = 100  # Bắt đầu từ vị trí này và tăng dần cho mỗi thuật toán
 
+    
+    start = time.perf_counter()
+    BFS_path = BFS_solve(screen, maze_copy_for_bfs, state.start_pos, state.goal_pos, None, PLAYER_POS, BORDER_COLOR_PLAYER, CELL_SIZE_PLAYER)
+    end = time.perf_counter()
+    state.bfs_time = round(end - start, 8)
+    
     start = time.perf_counter()
     DFS_path = DFS_solve(screen, maze_copy_for_dfs, state.start_pos, state.goal_pos, None, PLAYER_POS, BORDER_COLOR_PLAYER, CELL_SIZE_PLAYER)
     end = time.perf_counter()
-    print(f"DFS thời gian: {end - start:.8f} giây")
-
+    state.dfs_time = round(end - start, 8)
+    
     start = time.perf_counter()
     Greedy_path = GreedyBestFirst_solve(screen, maze_copy_for_greedy, state.start_pos, state.goal_pos, None, PLAYER_POS, BORDER_COLOR_PLAYER, CELL_SIZE_PLAYER)
     end = time.perf_counter()
-    print(f"Greedy thời gian: {end - start:.8f} giây")
+    state.greedy_time = round(end - start, 8)
 
     start = time.perf_counter()
     A_star_path = A_star(screen, maze_copy_for_Astar, state.start_pos, state.goal_pos, None, PLAYER_POS, BORDER_COLOR_PLAYER, CELL_SIZE_PLAYER)
     end = time.perf_counter()
-    print(f"A_star thời gian: {end - start:.8f} giây")
+    state.Astar_time = round(end - start, 8)

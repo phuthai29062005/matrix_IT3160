@@ -23,7 +23,7 @@ def BFS_solve(screen, maze, start, goal, scattered_points, pos, border_color, ce
         # Vẽ lại màn hình
         draw_maze(screen, maze, pos, border_color, cell_size, start, goal, current, current, visited_cells, scattered_points, blink_state=True)
         pygame.display.update()
-        pygame.time.delay(50)  # Delay 50ms cho đẹp mắt
+        pygame.time.delay(20)  # Delay 50ms cho đẹp mắt
 
         if current == goal:
             break
