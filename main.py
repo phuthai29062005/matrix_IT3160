@@ -9,6 +9,7 @@ from maze_generation import *
 from colors_and_fonts import BLACK
 from player_movement import move_player
 from Easy import *
+from compare import *
 
 
 pygame.init()  # Khởi tạo Pygame
@@ -40,41 +41,7 @@ def main():
                 state.maze = generate_maze()
                 generate = True
             
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
-                elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-                        running = False
-                elif event.type == pygame.MOUSEBUTTONDOWN and state.maze is not None:
-                    mouse_x, mouse_y = pygame.mouse.get_pos()
-                    
-                    # Tính toán tọa độ tương đối so với góc mê cung
-                    relative_x = mouse_x - PLAYER_POS[0]
-                    relative_y = mouse_y - PLAYER_POS[1]
-                    
-                    # Chỉ xử lý nếu click trong vùng mê cung
-                    if 0 <= relative_x < GRID_SIZE * CELL_SIZE_PLAYER and 0 <= relative_y < GRID_SIZE * CELL_SIZE_PLAYER:
-                        row = int(relative_x // CELL_SIZE_PLAYER)
-                        col = int(relative_y // CELL_SIZE_PLAYER)
-                        
-                        if 0 <= row < GRID_SIZE and 0 <= col < GRID_SIZE:
-                            if state.start_pos is None:
-                                state.start_pos = (row, col)
-                                state.maze[row][col] = 0
-                                print(f"Start position set to: {row}, {col}")
-                            elif state.goal_pos is None and (row, col) != state.start_pos:
-                                state.goal_pos = (row, col)
-                                state.maze[row][col] = 0
-                                print(f"Goal position set to: {row}, {col}")
-                            
-                            if state.start_pos and state.goal_pos:
-                                maze_copy_for_bfs = copy.deepcopy(state.maze)
-                                maze_copy_for_dfs = copy.deepcopy(state.maze)
-
-                                BFS_path = BFS_solve(screen, maze_copy_for_bfs, state.start_pos, state.goal_pos, None, PLAYER_POS, BORDER_COLOR_PLAYER, CELL_SIZE_PLAYER)
-                                DFS_path = DFS_solve(screen, maze_copy_for_dfs, state.start_pos, state.goal_pos, None, PLAYER_POS, BORDER_COLOR_PLAYER, CELL_SIZE_PLAYER)
-                        
+            choose_position(screen, state)                  
             screen.fill(BLACK)
             
             if state.maze is not None:

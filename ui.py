@@ -84,7 +84,7 @@ def draw_maze(screen, maze, pos, border_color, cell_size, start, end, player_pos
             pygame.draw.rect(screen, color, cell_rect)
 
             # Nếu ô này chứa điểm, vẽ điểm lên trên
-            if (x, y) in scattered_points:
+            if scattered_points is not None and (x, y) in scattered_points:
                 point_value = scattered_points[(x, y)]
                 point_color = POINT_COLORS.get(point_value, (255, 255, 255))
 
