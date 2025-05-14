@@ -8,8 +8,8 @@ from ui import *
 from maze_generation import *
 from colors_and_fonts import BLACK
 from player_movement import move_player
-from Easy import *
-from compare import *
+from Find_Single_Path import *
+from compare_path import *
 
 
 pygame.init()  # Khởi tạo Pygame
