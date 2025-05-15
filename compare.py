@@ -2,7 +2,7 @@ import pygame
 import copy
 import time
 from game_state import GameState
-from Easy import *
+from Find_Single_Path import *
 
 def choose_position(screen, state):
     for event in pygame.event.get():

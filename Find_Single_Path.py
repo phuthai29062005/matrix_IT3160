@@ -28,7 +28,7 @@ def BFS_solve(screen, maze, pos, border_color, cell_size, start, goal, blink_sta
         # Duyệt các ô lân cận
         for dx, dy in [(1, 0), (0, 1), (-1, 0), (0, -1)]:
             neighbor = (current[0] + dx, current[1] + dy)
-            if 0 <= neighbor[0] < GRID_SIZE and 0 <= neighbor[1] < GRID_SIZE and neighbor not in visited:
+            if 0 <= neighbor[0] < GRID_SIZE and 0 <= neighbor[1] < GRID_SIZE and maze[neighbor[0]][neighbor[1]] == 0 and neighbor not in visited:
                 queue.append(neighbor)
                 visited[neighbor] = current
 
@@ -56,7 +56,7 @@ def DFS_solve(screen, maze, pos, border_color, cell_size, start, goal, blink_sta
 
         for dx, dy in [(1, 0), (0, 1), (-1, 0), (0, -1)]:
             neighbor = (current[0] + dx, current[1] + dy)
-            if 0 <= neighbor[0] < GRID_SIZE and 0 <= neighbor[1] < GRID_SIZE and neighbor not in visited:
+            if 0 <= neighbor[0] < GRID_SIZE and 0 <= neighbor[1] < GRID_SIZE and maze[neighbor[0]][neighbor[1]] == 0 and neighbor not in visited:
                 stack.append(neighbor)
                 visited[neighbor] = current
 
@@ -85,7 +85,7 @@ def GreedyBestFirst_solve(screen, maze, pos, border_color, cell_size, start, goa
             break
         for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
             neighbor = (current[0] + dx, current[1] + dy)
-            if 0 <= neighbor[0] < GRID_SIZE and 0 <= neighbor[1] < GRID_SIZE and neighbor not in visited:
+            if 0 <= neighbor[0] < GRID_SIZE and 0 <= neighbor[1] < GRID_SIZE and maze[neighbor[0]][neighbor[1]] == 0 and neighbor not in visited:
                 priority = heuristic(neighbor, goal)
                 queue.put((priority, neighbor))
                 visited[neighbor] = current
@@ -115,7 +115,7 @@ def A_star(screen, maze, pos, border_color, cell_size, start, goal, blink_state)
             break
         for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
             neighbor = (current[0] + dx, current[1] + dy)
-            if 0 <= neighbor[0] < GRID_SIZE and 0 <= neighbor[1] < GRID_SIZE and neighbor not in visited:
+            if 0 <= neighbor[0] < GRID_SIZE and 0 <= neighbor[1] < GRID_SIZE and maze[neighbor[0]][neighbor[1]] == 0 and neighbor not in visited:
                 new_cost = cost[current] + 1
                 cost[neighbor] = new_cost
                 priority = new_cost + heuristic(neighbor, goal)

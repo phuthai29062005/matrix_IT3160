@@ -9,7 +9,7 @@ from maze_generation import *
 from colors_and_fonts import BLACK
 from player_movement import move_player
 from Find_Single_Path import *
-from compare_path import *
+from compare import *
 
 
 pygame.init()  # Khởi tạo Pygame
