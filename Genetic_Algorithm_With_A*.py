@@ -1,48 +1,18 @@
 import numpy as np
-from queue import PriorityQueue
+from collections import deque
 import random
 from Find_Single_Path import A_star
+from Cost_Matrix import *
 
 INT_MAX = 2147483647
 
 GRID = 70
 
-def distance_with_BFS(maze, start, checkpoints): # return list
-    result = {start: 0}
-    level = 0
-    stack = []
-    stack.append(start)
-
-    while not stack.empty():
-        current = stack.pop()
-        level += 1
-        for dx, dy in [(0, -1), (1, 0), (0, 1), (-1, 0)]:
-            neighbor = current[0] + dx, current[1] + dy
-            if (neighbor[0] < GRID and neighbor[1] < GRID and maze[current[0]][current[1]] == 0 and current not in stack):
-                stack.append(neighbor)
-                if (neighbor in checkpoints):
-                    result.update({neighbor: level})
-
-    for i in range(len(checkpoints)):
-        checkpoints[i] = result[checkpoints[i]]
-
-    return checkpoints
-
-def preprocess(maze, start, goal, checkpoints):
-    checkpoints.append(goal)
-    checkpoints.insert(0, start)
-    total_points = len(checkpoints)
-    cost_matrix = np.zeros(total_points, total_points)
-    for i in range(total_points):
-        cost_matrix[i] = distance_with_BFS(maze, checkpoints[i], checkpoints)
-    return cost_matrix
-
 def create_initial_population(population_size, numPoints):
     population = []
-    for _ in population_size:
-        original = [i for i in range(1, numPoints + 1)]
-        original.shuffle(original)
-        individual = original
+    for _ in range(population_size):
+        individual = list(range(1, numPoints + 1))
+        random.shuffle(individual)
         population.append(individual)
     return population
 
@@ -55,7 +25,7 @@ def cal_fitness(start, goal, chromosome):
     return score
 
 def selection(population, fitness_score, numElite):
-    best_indices = np.argmax(fitness_score, numElite)
+    best_indices = np.argsort(fitness_score)[:numElite]
     return [population[i] for i in best_indices]
 
 def cross_over(parent1, parent2):
@@ -101,7 +71,7 @@ def genetic_algorithm(maze, start, goal, checkpoints, mutation_rate, max_iter):
 
         population = new_generation
 
-    best_route = np.argmax(population)
+    best_route = np.argmin(fitness_population)
     return population[best_route]
 
 def ga_Astar(maze, start, goal, checkpoints, mutation_rate=0.2, max_iter=1000):
