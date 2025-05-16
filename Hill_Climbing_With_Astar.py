@@ -4,7 +4,6 @@ from Easy import A_star
 from ui import *
 
 def total_dist(start, goal, route, cost_matrix): # cho mỗi route
-	#print("route: " + str(route))
 	dist = cost_matrix[0][route[0]]
 	for i in range(len(route) - 1):
 		dist += cost_matrix[i][i + 1]
@@ -41,9 +40,8 @@ def hill_climbing(maze, start, goal, checkpoints):
 
 def hill_climbing_Astar(maze, start, goal, checkpoints):
 	order = hill_climbing(maze, start, goal, checkpoints)
-	print("order: " + str(order))
 	order = [x - 1 for x in order]  # chuyển đổi từ 1-based index sang 0-based index
-
+	print("order: " + str(order))
 	path = A_star(None, maze, start, checkpoints[order[0]], checkpoints, AI_POS, BORDER_COLOR_AI, CELL_SIZE_AI, False)
 
 	for i in range(len(order) - 1):

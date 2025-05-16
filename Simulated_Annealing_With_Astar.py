@@ -1,13 +1,14 @@
 import random
 from Cost_Matrix import *
-from Find_Single_Path import A_star
+from Easy import A_star
 import numpy as np
+from ui import *
 
-def total_dist(start, goal, checkpoints):
-	dist = cost_matrix[0][checkpoints[0]]
-	for i in range(len(checkpoints) - 1):
-		dist += cost_matrix[checkpoints[i]][checkpoints[i + 1]]
-	dist += cost_matrix[checkpoints[-1]][len(checkpoints) + 1]
+def total_dist(start, goal, route, cost_matrix): # cho mỗi route
+	dist = cost_matrix[0][route[0]]
+	for i in range(len(route) - 1):
+		dist += cost_matrix[i][i + 1]
+	dist += cost_matrix[route[-1]][len(cost_matrix) - 1]
 
 	return dist
 
@@ -21,19 +22,18 @@ def generate_neighbors(route):
 	return neighbors
 
 def simulated_annealing(maze, start, goal, checkpoints, temperature, cooling_rate, max_iter):
-	global cost_matrix
-	cost_matrix = preprocess(maze, start, goal, checkpoints)
+	cost_matrix = preprocess(maze, start, goal, checkpoints.copy())
 	original = list(range(1, len(checkpoints) + 1))
 	random.shuffle(original)
 	current_route = original
-	current_dist = total_dist(start, goal, original)
+	current_dist = total_dist(start, goal, original, cost_matrix)
 	best_route = current_route
 	best_dist = current_dist
 
 	for _ in range(max_iter):
 		neighbors = generate_neighbors(current_route) 
 		next_route = random.choice(neighbors)
-		dist_next_route = total_dist(start, goal,next_route)
+		dist_next_route = total_dist(start, goal,next_route, cost_matrix)
 
 		if (dist_next_route < current_dist or random.random() < np.exp((current_dist - dist_next_route) / temperature)):
 			current_route = next_route
@@ -48,10 +48,18 @@ def simulated_annealing(maze, start, goal, checkpoints, temperature, cooling_rat
 
 def simulated_annealing_Astar(maze, start, goal, checkpoints, temperature = 300, cooling_rate = 0.99, max_iter = 1000):
 	order = simulated_annealing(maze, start, goal, checkpoints, temperature, cooling_rate, max_iter)
-	A_star(maze, start, order[0])
+	order = [x - 1 for x in order]  # chuyển đổi từ 1-based index sang 0-based index
+	print("order: " + str(order))
+
+	path = A_star(None, maze, start, checkpoints[order[0]], checkpoints, AI_POS, BORDER_COLOR_AI, CELL_SIZE_AI, False)
+
 	for i in range(len(order) - 1):
-		A_star(maze, order[i], order[i+1])
-	A_star(maze, order[-1], goal)
+		path.extend(A_star(None, maze, checkpoints[order[i]], checkpoints[order[i + 1]], None, AI_POS, BORDER_COLOR_AI, CELL_SIZE_AI, False))
+	path.extend(A_star(None, maze, checkpoints[order[-1]], goal, None, AI_POS, BORDER_COLOR_AI, CELL_SIZE_AI, False))
+	return path
+
+
+	
 
 
 
