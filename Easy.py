@@ -116,8 +116,8 @@ def A_star(screen, maze, start, goal, scattered_points, pos, border_color, cell_
         maze[current[0]][current[1]] = 2
         if draw == True:
             draw_maze(screen, maze, pos, border_color, cell_size, start, goal, current, current, visited_cells, scattered_points, blink_state=True)
-        pygame.display.update()
-        pygame.time.delay(20)  # Delay 50ms cho đẹp mắt
+            pygame.display.update()
+            pygame.time.delay(20)  # Delay 50ms cho đẹp mắt
 
         if current == goal:
             break
