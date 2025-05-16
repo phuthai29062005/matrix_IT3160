@@ -22,6 +22,11 @@ class GameState:
         self.win = False
         self.load_level()
 
+        self.bfs_time = None
+        self.dfs_time = None
+        self.greedy_time = None
+        self.Astar_time = None
+
     def reset(self):
         self.maze = None
         self.start_pos = None

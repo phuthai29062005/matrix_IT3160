@@ -1,6 +1,7 @@
 import time
 from player_movement import move_player
 from maze_generation import find_shortest_path
+from Hill_Climbing_With_Astar import *
 
 # Hàm cập nhật di chuyển của người chơi
 def update_player(state, keys):
@@ -12,11 +13,6 @@ def update_player(state, keys):
         new_pos, state.last_move_time = move_player(keys, state.player_pos, state.maze, state.visited_cells, state.last_move_time)
         state.score += state.scattered_points.pop(new_pos, 0)  # Cộng điểm nếu người chơi thu thập được điểm
         state.player_pos = new_pos  # Cập nhật vị trí người chơi
-
-
-import time
-from player_movement import move_player
-from maze_generation import find_shortest_path
 
 def move_ai(maze, ai_pos, goal_pos, ai_path, last_move_time, move_delay):
     current_time = time.time()
@@ -33,9 +29,14 @@ def move_ai(maze, ai_pos, goal_pos, ai_path, last_move_time, move_delay):
 
 def update_ai(state):
     # Nếu không có đường đi hoặc đã đi hết đường đi
+    print(state.ai_pos)
+    print(state.goal_pos)
     if not state.ai_path or state.ai_pos == state.goal_pos:
         # Tìm đường đi mới
-        state.ai_path = find_shortest_path(state.maze, state.ai_pos, state.goal_pos)    
+        checkpoints = list(state.ai_scattered_points.keys())  # Get the coordinates (x,y) tuples
+        print("1", state.goal_pos)
+        state.ai_path = hill_climbing_Astar(state.maze, state.ai_pos, state.goal_pos, checkpoints)
+    
     # Di chuyển AI
     state.ai_pos, state.ai_last_move_time = move_ai(
         state.maze, 

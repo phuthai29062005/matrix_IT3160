@@ -20,7 +20,7 @@ def BFS_solve(screen, maze, pos, border_color, cell_size, start, goal, blink_sta
         draw_maze(screen, maze, pos, border_color, cell_size, start, goal, current, visited[current], visited_cells, set(), blink_state)
         # set() rỗng vì không có điểm rải rác trong BFS
         pygame.display.update()
-        pygame.time.delay(50)  # Delay 50ms cho đẹp mắt
+        pygame.time.delay(20)  # Delay 50ms cho đẹp mắt
 
         if current == goal:
             break
@@ -97,7 +97,8 @@ def GreedyBestFirst_solve(screen, maze, pos, border_color, cell_size, start, goa
     return path[::-1]
 
 
-def A_star(screen, maze, pos, border_color, cell_size, start, goal, blink_state):
+def A_star(screen, maze, start, goal, scattered_points, pos, border_color, cell_size, draw):
+    print("3", goal)
     queue = PriorityQueue()
     queue.put((0, start))
     visited = {start: None}
@@ -107,9 +108,11 @@ def A_star(screen, maze, pos, border_color, cell_size, start, goal, blink_state)
     while not queue.empty():
         _, current = queue.get()
         visited_cells.add(current)
-        draw_maze(screen, maze, pos, border_color, cell_size, start, goal, current, visited[current], visited_cells, set(), blink_state)
-        pygame.display.update()
-        pygame.time.delay(50)  # Delay 50ms cho đẹp mắt
+        maze[current[0]][current[1]] = 2
+        if draw == True:
+            draw_maze(screen, maze, pos, border_color, cell_size, start, goal, current, current, visited_cells, scattered_points, blink_state=True)
+            pygame.display.update()
+            pygame.time.delay(20)  # Delay 50ms cho đẹp mắt
 
         if current == goal:
             break

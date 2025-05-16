@@ -2,7 +2,7 @@ from ui import *
 from colors_and_fonts import BLACK
 
 # Hàm vẽ tất cả các thành phần của game lên màn hình
-def draw_everything(screen, state, blink_state):
+def draw_everything_true(screen, state, blink_state):
     screen.fill(BLACK)  # Đặt nền đen
 
     draw_headings(screen)  # Vẽ tiêu đề game
@@ -16,6 +16,9 @@ def draw_everything(screen, state, blink_state):
     draw_exit_message(screen)  # Vẽ thông báo thoát
     draw_score(screen, state.score, state.target_score)  # Vẽ điểm số và điểm mục tiêu
 
+    if state.bfs_time is not None:
+        draw_time(screen, "BFS", state.bfs_time, SCREEN_WIDTH - 300, 100)
+
     # Nếu người chơi đến được mục tiêu
     if state.player_pos == state.goal_pos:
         if state.score >= state.target_score:
@@ -28,3 +31,17 @@ def draw_everything(screen, state, blink_state):
 
     if state.win:
         draw_you_win(screen)  # Hiển thị thông báo thắng game
+
+def draw_everything_false(screen, state):
+
+    if state.bfs_time is not None:
+        draw_time(screen, "BFS", state.bfs_time, SCREEN_WIDTH - 400, 100)
+    
+    if state.dfs_time is not None:
+        draw_time(screen, "DFS", state.dfs_time, SCREEN_WIDTH - 400, 140)
+
+    if state.greedy_time is not None:
+        draw_time(screen, "Greedy", state.greedy_time, SCREEN_WIDTH - 400, 180)
+
+    if state.Astar_time is not None:
+        draw_time(screen, "A_star", state.Astar_time, SCREEN_WIDTH - 400, 220)

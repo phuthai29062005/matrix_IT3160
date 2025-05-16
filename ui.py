@@ -190,3 +190,10 @@ def draw_next_level_message(screen, current_level):
     """Hiển thị thông báo khi hoàn thành level"""
     text = f"Level {current_level} Complete! Press SPACE for Next"
     draw_text(screen, text, SCREEN_WIDTH // 2, SCREEN_HEIGHT - 50, 30)
+
+
+def draw_time(screen, algorithm, time, x, y, font_size=30):
+    """Hiển thị thời gian thực hiện thuật toán tại vị trí (x, y)"""
+    text = f"{algorithm}: {time:.8f}s"
+    text_surface = pygame.font.Font(FONT_PATH, font_size).render(text, True, WHITE)
+    screen.blit(text_surface, (x, y))
