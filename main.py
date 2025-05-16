@@ -17,7 +17,7 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.FULLSCREE
 clock = pygame.time.Clock()  # Tạo đối tượng clock để điều khiển FPS
 
 def main():
-    play = False
+    play = True
     state = GameState()
     running = True
     maze = None

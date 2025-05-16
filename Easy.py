@@ -102,7 +102,7 @@ def GreedyBestFirst_solve(screen, maze, start, goal, scattered_points, pos, bord
     return path[::-1]
 
 
-def A_star(screen, maze, start, goal, scattered_points, pos, border_color, cell_size):
+def A_star(screen, maze, start, goal, scattered_points, pos, border_color, cell_size, draw):
     queue = PriorityQueue()
     queue.put((0, start))
     visited = {start: None}
@@ -113,7 +113,8 @@ def A_star(screen, maze, start, goal, scattered_points, pos, border_color, cell_
         _, current = queue.get()
         visited_cells.add(current)
         maze[current[0]][current[1]] = 2
-        draw_maze(screen, maze, pos, border_color, cell_size, start, goal, current, current, visited_cells, scattered_points, blink_state=True)
+        if draw == True:
+            draw_maze(screen, maze, pos, border_color, cell_size, start, goal, current, current, visited_cells, scattered_points, blink_state=True)
         pygame.display.update()
         pygame.time.delay(20)  # Delay 50ms cho đẹp mắt
 

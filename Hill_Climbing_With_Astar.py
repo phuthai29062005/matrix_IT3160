@@ -1,6 +1,6 @@
 import random
 from Cost_Matrix import *
-from Find_Single_Path import A_star
+from Easy import A_star
 
 def total_dist(start, goal, checkpoints):
 	dist = cost_matrix[0][checkpoints[0]]
@@ -40,10 +40,12 @@ def hill_climbing(maze, start, goal, checkpoints):
 
 def hill_climbing_Astar(maze, start, goal, checkpoints):
 	order = hill_climbing(maze, start, goal, checkpoints)
-	A_star(maze, start, order[0])
+	path = A_star(None, maze, start, order[0], None, AI_POS, BORDER_COLOR_AI, CELL_SIZE_AI, False)
 	for i in range(len(order) - 1):
-		A_star(maze, order[i], order[i+1])
-	A_star(maze, order[-1], goal)
+		path.extend(A_star(None, maze, order[i], order[i + 1], None, AI_POS, BORDER_COLOR_AI, CELL_SIZE_AI, False))
+	path.extend(A_star(None, maze, order[-1], goal, None, AI_POS, BORDER_COLOR_AI, CELL_SIZE_AI, False))
+	
+	return path
 	
 
 
