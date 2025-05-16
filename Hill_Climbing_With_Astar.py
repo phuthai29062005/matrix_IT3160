@@ -1,12 +1,13 @@
 import random
 from Cost_Matrix import *
 from Easy import A_star
+from ui import *
 
-def total_dist(start, goal, checkpoints):
-	dist = cost_matrix[0][checkpoints[0]]
+def total_dist(start, goal, checkpoints, cost_matrix):
+	dist = cost_matrix[0][1]
 	for i in range(len(checkpoints) - 1):
-		dist += cost_matrix[checkpoints[i]][checkpoints[i + 1]]
-	dist += cost_matrix[checkpoints[-1]][len(checkpoints) + 1]
+		dist += cost_matrix[i][i + 1]
+	dist += cost_matrix[-1][len(checkpoints) - 1]
 
 	return dist
 
@@ -20,31 +21,35 @@ def generate_neighbors(route):
 	return neighbors
 
 def hill_climbing(maze, start, goal, checkpoints):
-	global cost_matrix
 	cost_matrix = preprocess(maze, start, goal, checkpoints)
 	original = list(range(1, len(checkpoints) + 1))
 	random.shuffle(original)
 	route = original
-	dist = total_dist(start, goal, route)
+	dist = total_dist(start, goal, route, cost_matrix)
 
 	while(True):
 		neighbors = generate_neighbors(route)
-		best_neighbor = min(neighbors, key = lambda x: total_dist(start, goal, x))
-		dist_best_neighbor = total_dist(best_neighbor)
+		best_neighbor = min(neighbors, key = lambda x: total_dist(start, goal, x, cost_matrix))
+		dist_best_neighbor = total_dist(start, goal, best_neighbor, cost_matrix)
 		if (dist_best_neighbor >= dist):
 			break
 		route = best_neighbor
 		dist = dist_best_neighbor
 
-	return route
+	return route 
 
 def hill_climbing_Astar(maze, start, goal, checkpoints):
+    
 	order = hill_climbing(maze, start, goal, checkpoints)
-	path = A_star(None, maze, start, order[0], None, AI_POS, BORDER_COLOR_AI, CELL_SIZE_AI, False)
-	for i in range(len(order) - 1):
-		path.extend(A_star(None, maze, order[i], order[i + 1], None, AI_POS, BORDER_COLOR_AI, CELL_SIZE_AI, False))
-	path.extend(A_star(None, maze, order[-1], goal, None, AI_POS, BORDER_COLOR_AI, CELL_SIZE_AI, False))
+	print(checkpoints[order[0]])
+	'''
+	path = A_star(None, maze, start, checkpoints[order[0]], checkpoints, AI_POS, BORDER_COLOR_AI, CELL_SIZE_AI, False)
+	print("2", goal)
 	
+	for i in range(len(order) - 1):
+		path.extend(A_star(None, maze, checkpoints[order[i]], checkpoints[order[i + 1]], None, AI_POS, BORDER_COLOR_AI, CELL_SIZE_AI, False))
+	path.extend(A_star(None, maze, checkpoints[order[-1]], goal, None, AI_POS, BORDER_COLOR_AI, CELL_SIZE_AI, False))
+	'''
 	return path
 	
 

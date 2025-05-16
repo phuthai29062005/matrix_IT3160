@@ -4,7 +4,7 @@ import numpy as np
 GRID = 70
 
 def distance_with_BFS(maze, start, checkpoints): # return list
-    print("vi tri: " + str(start))
+    
     result = {start: 0}
     queue = deque([(start, 0)])
     visited = set([start])

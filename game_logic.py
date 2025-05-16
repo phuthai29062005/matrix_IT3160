@@ -33,7 +33,8 @@ def update_ai(state):
     print(state.goal_pos)
     if not state.ai_path or state.ai_pos == state.goal_pos:
         # Tìm đường đi mới
-        checkpoints = list(state.ai_scattered_points.values()) if isinstance(state.ai_scattered_points, dict) else state.ai_scattered_points
+        checkpoints = list(state.ai_scattered_points.keys())  # Get the coordinates (x,y) tuples
+        print("1", state.goal_pos)
         state.ai_path = hill_climbing_Astar(state.maze, state.ai_pos, state.goal_pos, checkpoints)
     
     # Di chuyển AI
