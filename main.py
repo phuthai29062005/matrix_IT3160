@@ -10,7 +10,7 @@ from colors_and_fonts import BLACK
 from player_movement import move_player
 from Easy import *
 from compare import *
-
+from Hill_Climbing_With_Astar import *
 
 pygame.init()  # Khởi tạo Pygame
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.FULLSCREEN)  # Thiết lập cửa sổ game ở chế độ full screen

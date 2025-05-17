@@ -103,7 +103,6 @@ def GreedyBestFirst_solve(screen, maze, start, goal, scattered_points, pos, bord
 
 
 def A_star(screen, maze, start, goal, scattered_points, pos, border_color, cell_size, draw):
-    print("3", goal)
     queue = PriorityQueue()
     queue.put((0, start))
     visited = {start: None}
