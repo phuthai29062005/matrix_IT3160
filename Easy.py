@@ -103,15 +103,14 @@ def GreedyBestFirst_solve(screen, maze, start, goal, scattered_points, pos, bord
 
 
 def A_star(screen, maze, start, goal, scattered_points, pos, border_color, cell_size, draw):
-    print("3", goal)
-    queue = PriorityQueue()
-    queue.put((0, start))
-    visited = {start: None}
+    fringe = PriorityQueue()
+    fringe.put((0, start))
+    visited = {start: None} # dùng dict để lưu cha
     visited_cells = set()
     cost = {start: 0} # lưu chi phí thực từ start đến neighbor
 
-    while not queue.empty():
-        _, current = queue.get()
+    while not fringe.empty():
+        _, current = fringe.get()
         visited_cells.add(current)
         maze[current[0]][current[1]] = 2
         if draw == True:
@@ -127,11 +126,13 @@ def A_star(screen, maze, start, goal, scattered_points, pos, border_color, cell_
                 new_cost = cost[current] + 1
                 cost[neighbor] = new_cost
                 priority = new_cost + heuristic(neighbor, goal)
-                queue.put((priority, neighbor))
+                fringe.put((priority, neighbor))
                 visited[neighbor] = current
 
+    current = goal 
     path = []
     while current is not None:
         path.append(current)
-        current = visited[current]
+        current = visited.get(current)
     return path[::-1]
+
