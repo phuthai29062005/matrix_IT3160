@@ -42,7 +42,6 @@ def hill_climbing_Astar(maze, start, goal, checkpoints):
     order = hill_climbing(maze, start, goal, checkpoints)
     order = [x - 1 for x in order]  # chuyển đổi từ 1-based index sang 0-based index
     
-    # Tạo một bản sao của maze để không ảnh hưởng đến maze gốc
     path = A_star(maze, start, checkpoints[order[0]])    
     
     # Tạo đường đi giữa các checkpoints

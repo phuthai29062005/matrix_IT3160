@@ -74,39 +74,20 @@ def genetic_algorithm(maze, start, goal, checkpoints, mutation_rate, max_iter):
     best_route = np.argmin(fitness_population)
     return population[best_route]
 
-def ga_Astar(maze, start, goal, checkpoints, mutation_rate=0.2, max_iter=1000):
+def ga_Astar(maze, start, goal, checkpoints, mutation_rate=0.2, max_iter=10000):
     order = genetic_algorithm(maze, start, goal, checkpoints, mutation_rate, max_iter)
     order = [x - 1 for x in order]  # chuyển đổi từ 1-based index sang 0-based index
-    # Tạo một bản sao của maze để không ảnh hưởng đến maze gốc
-    maze_copy = maze.copy()
-    path = A_star(None, maze_copy, start, checkpoints[order[0]], None, AI_POS, BORDER_COLOR_AI, CELL_SIZE_AI, False)
-    
-    # Reset maze sau mỗi lần tìm đường
-    for x in range(len(maze_copy)):
-        for y in range(len(maze_copy[0])):
-            if maze_copy[x][y] == 2:
-                maze_copy[x][y] = 0
+    path = A_star(maze, start, checkpoints[order[0]])    
     
     # Tạo đường đi giữa các checkpoints
     for i in range(len(order) - 1):
-        segment = A_star(None, maze_copy, checkpoints[order[i]], checkpoints[order[i + 1]], None, AI_POS, BORDER_COLOR_AI, CELL_SIZE_AI, False)
+        segment = A_star(maze, checkpoints[order[i]], checkpoints[order[i + 1]])
         path.extend(segment[1:])  # Bỏ phần tử đầu để tránh trùng lặp
-            
-        # Reset maze sau mỗi lần tìm đường
-        for x in range(len(maze_copy)):
-            for y in range(len(maze_copy[0])):
-                if maze_copy[x][y] == 2:
-                    maze_copy[x][y] = 0
     
     # Tạo đường đi từ checkpoint cuối cùng đến goal
-    final_segment = A_star(None, maze_copy, checkpoints[order[-1]], goal, None, AI_POS, BORDER_COLOR_AI, CELL_SIZE_AI, False)
+    final_segment = A_star(maze, checkpoints[order[-1]], goal)
     path.extend(final_segment[1:])  # Bỏ phần tử đầu để tránh trùng lặp
     
-    
-    for x in range(len(maze)):
-        for y in range(len(maze[0])):
-            if maze[x][y] == 2:
-                maze[x][y] = 0
     return path
 	
 
