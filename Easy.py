@@ -40,7 +40,7 @@ def BFS_solve(screen, maze, start, goal, scattered_points, pos, border_color, ce
     while current is not None:
         path.append(current)
         current = visited[current]
-    return path[::-1] 
+    return len(path) 
 
 def DFS_solve(screen, maze, start, goal, scattered_points, pos, border_color, cell_size):
     stack = [start]
@@ -70,7 +70,7 @@ def DFS_solve(screen, maze, start, goal, scattered_points, pos, border_color, ce
     while current is not None:
         path.append(current)
         current = visited[current]
-    return path[::-1]
+    return len(path)  
 
 def GreedyBestFirst_solve(screen, maze, start, goal, scattered_points, pos, border_color, cell_size):
     queue = PriorityQueue()
@@ -99,10 +99,10 @@ def GreedyBestFirst_solve(screen, maze, start, goal, scattered_points, pos, bord
     while current is not None:
         path.append(current)
         current = visited[current]
-    return path[::-1]
+    return len(path)
 
 
-def A_star(screen, maze, start, goal, scattered_points, pos, border_color, cell_size, draw):
+def A_star_solve(screen, maze, start, goal, scattered_points, pos, border_color, cell_size, draw):
     fringe = PriorityQueue()
     fringe.put((0, start))
     visited = {start: None} # dùng dict để lưu cha
@@ -134,5 +134,33 @@ def A_star(screen, maze, start, goal, scattered_points, pos, border_color, cell_
     while current is not None:
         path.append(current)
         current = visited.get(current)
-    return path[::-1]
+    return len(path)  # Trả về đường đi từ start đến goal
+
+def A_star(maze, start, goal):
+    fringe = PriorityQueue()
+    fringe.put((0, start))
+    visited = {start: None} # dùng dict để lưu cha
+    cost = {start: 0} # lưu chi phí thực từ start đến một nút
+
+    while not fringe.empty():
+        _, current = fringe.get()
+        if current == goal:
+            break
+        for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+            neighbor = (current[0] + dx, current[1] + dy)
+            if 0 <= neighbor[0] < GRID_SIZE and 0 <= neighbor[1] < GRID_SIZE and maze[neighbor[0]][neighbor[1]] == 0 and neighbor not in visited:
+                new_cost = cost[current] + 1
+                cost[neighbor] = new_cost
+                priority = new_cost + heuristic(neighbor, goal)
+                fringe.put((priority, neighbor))
+                visited[neighbor] = current
+
+    current = goal 
+    path = []
+    while current is not None:
+        path.append(current)
+        current = visited.get(current)
+    return path[::-1]  # Trả về đường đi từ start đến goal
+
+
 
