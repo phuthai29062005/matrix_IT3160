@@ -20,6 +20,7 @@ class GameState:
         ]
         self.current_level = 1
         self.win = False
+        self.read_map = False
         self.load_level()
 
         self.bfs_time = None
