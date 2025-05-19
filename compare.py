@@ -51,21 +51,24 @@ def compare_maze(screen, state):
 
     
     start = time.perf_counter()
-    BFS_path = BFS_solve(screen, maze_copy_for_bfs, state.start_pos, state.goal_pos, None, PLAYER_POS, BORDER_COLOR_PLAYER, CELL_SIZE_PLAYER)
+    state.bfs_path = BFS_solve(screen, maze_copy_for_bfs, state.start_pos, state.goal_pos, None, PLAYER_POS, BORDER_COLOR_PLAYER, CELL_SIZE_PLAYER)
     end = time.perf_counter()
+    
     state.bfs_time = round(end - start, 8)
     
     start = time.perf_counter()
-    DFS_path = DFS_solve(screen, maze_copy_for_dfs, state.start_pos, state.goal_pos, None, PLAYER_POS, BORDER_COLOR_PLAYER, CELL_SIZE_PLAYER)
+    state.dfs_path = DFS_solve(screen, maze_copy_for_dfs, state.start_pos, state.goal_pos, None, PLAYER_POS, BORDER_COLOR_PLAYER, CELL_SIZE_PLAYER)
     end = time.perf_counter()
     state.dfs_time = round(end - start, 8)
     
     start = time.perf_counter()
-    Greedy_path = GreedyBestFirst_solve(screen, maze_copy_for_greedy, state.start_pos, state.goal_pos, None, PLAYER_POS, BORDER_COLOR_PLAYER, CELL_SIZE_PLAYER)
+    state.greedy_path = GreedyBestFirst_solve(screen, maze_copy_for_greedy, state.start_pos, state.goal_pos, None, PLAYER_POS, BORDER_COLOR_PLAYER, CELL_SIZE_PLAYER)
     end = time.perf_counter()
     state.greedy_time = round(end - start, 8)
 
     start = time.perf_counter()
-    A_star_path = A_star(screen, maze_copy_for_Astar, state.start_pos, state.goal_pos, None, PLAYER_POS, BORDER_COLOR_PLAYER, CELL_SIZE_PLAYER, True)
+    state.Astar_path = A_star_solve(screen, maze_copy_for_Astar, state.start_pos, state.goal_pos, None, PLAYER_POS, BORDER_COLOR_PLAYER, CELL_SIZE_PLAYER, True)
+    
     end = time.perf_counter()
     state.Astar_time = round(end - start, 8)
+

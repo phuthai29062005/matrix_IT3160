@@ -24,7 +24,6 @@ def main():
     start_pos = None
     end_pos = None
     generate = False
-
     while running:
         clock.tick(30)
         blink_state = (pygame.time.get_ticks() // 500) % 2

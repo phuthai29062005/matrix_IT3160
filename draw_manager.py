@@ -36,13 +36,13 @@ def draw_everything_true(screen, state, blink_state):
 def draw_everything_false(screen, state):
 
     if state.bfs_time is not None:
-        draw_time(screen, "BFS", state.bfs_time, SCREEN_WIDTH - 400, 100)
+        draw_time(screen, "BFS", state.bfs_time, state.bfs_path, SCREEN_WIDTH - 500, 100)
     
     if state.dfs_time is not None:
-        draw_time(screen, "DFS", state.dfs_time, SCREEN_WIDTH - 400, 140)
+        draw_time(screen, "DFS", state.dfs_time, state.dfs_path, SCREEN_WIDTH - 500, 140)
 
     if state.greedy_time is not None:
-        draw_time(screen, "Greedy", state.greedy_time, SCREEN_WIDTH - 400, 180)
+        draw_time(screen, "Greedy", state.greedy_time, state.greedy_path, SCREEN_WIDTH - 500, 180)
 
     if state.Astar_time is not None:
-        draw_time(screen, "A_star", state.Astar_time, SCREEN_WIDTH - 400, 220)
+        draw_time(screen, "A_star", state.Astar_time, state.Astar_path, SCREEN_WIDTH - 500, 220)

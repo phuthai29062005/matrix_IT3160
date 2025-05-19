@@ -2,7 +2,8 @@ import time
 from player_movement import move_player
 from maze_generation import find_shortest_path
 from Hill_Climbing_With_Astar import *
-from colors_and_fonts import *
+from Simulated_Annealing_With_Astar import *
+from Genetic_Algorithm_With_Astar import *
 
 # Hàm cập nhật di chuyển của người chơi
 def update_player(state, keys):
@@ -30,17 +31,17 @@ def move_ai(maze, ai_pos, goal_pos, ai_path, last_move_time, move_delay):
 
 def update_ai(state):
     # Nếu không có đường đi hoặc đã đi hết đường đi
-    print("Start", state.ai_pos)
-    print("End", state.goal_pos)
-    
+    print(state.ai_pos)
+    print(state.goal_pos)
     if not state.ai_path or state.ai_pos == state.goal_pos:
         # Tìm đường đi mới
         checkpoints = list(state.ai_scattered_points.keys())  # Get the coordinates (x,y) tuples
-        #print("A_star")
-        state.ai_path = hill_climbing_Astar(state.maze, state.ai_pos, state.goal_pos, checkpoints)
-        print(state.ai_path)
-
-   
+        if state.current_level == 1:    
+            state.ai_path = hill_climbing_Astar(state.maze, state.ai_pos, state.goal_pos, checkpoints)
+        elif state.current_level == 2:
+            state.ai_path = ga_Astar(state.maze, state.ai_pos, state.goal_pos, checkpoints)
+        elif state.current_level == 3:
+            state.ai_path = simulated_annealing_Astar(state.maze, state.ai_pos, state.goal_pos, checkpoints)
     # Di chuyển AI
     state.ai_pos, state.ai_last_move_time = move_ai(
         state.maze, 

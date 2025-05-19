@@ -1,6 +1,6 @@
 import random
 from Cost_Matrix import *
-from Find_Single_Path import A_star
+from Easy import A_star
 import numpy as np
 
 def total_dist(start, goal, checkpoints):

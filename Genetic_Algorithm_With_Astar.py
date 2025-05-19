@@ -1,8 +1,9 @@
 import numpy as np
 from collections import deque
 import random
-from Find_Single_Path import A_star
+from Easy import A_star
 from Cost_Matrix import *
+from ui import *
 
 INT_MAX = 2147483647
 
@@ -16,7 +17,7 @@ def create_initial_population(population_size, numPoints):
         population.append(individual)
     return population
 
-def cal_fitness(start, goal, chromosome):
+def cal_fitness(start, goal, chromosome, cost_matrix):
     score = 0
     score += cost_matrix[0][chromosome[0]]
     for i in range(len(chromosome) - 1):
@@ -48,13 +49,12 @@ def mutation(chromosome, mutation_rate):
 
 def genetic_algorithm(maze, start, goal, checkpoints, mutation_rate, max_iter): 
 # trả về list chứa thứ tự các điểm đi qua
-    global cost_matrix
-    cost_matrix = preprocess(maze, start, goal, checkpoints)
+    cost_matrix = preprocess(maze, start, goal, checkpoints.copy())
     population_size = len(checkpoints) * 10
     numElite = int(population_size * 10 / 100)
     numHybrid = population_size - numElite
     population = create_initial_population(population_size, len(checkpoints))
-    fitness_population = [cal_fitness(start, goal, population[i]) for i in range(population_size)]
+    fitness_population = [cal_fitness(start, goal, population[i], cost_matrix) for i in range(population_size)]
 
     for _ in range(max_iter):
         new_generation = []
@@ -74,11 +74,21 @@ def genetic_algorithm(maze, start, goal, checkpoints, mutation_rate, max_iter):
     best_route = np.argmin(fitness_population)
     return population[best_route]
 
-def ga_Astar(maze, start, goal, checkpoints, mutation_rate=0.2, max_iter=1000):
+def ga_Astar(maze, start, goal, checkpoints, mutation_rate=0.2, max_iter=10000):
     order = genetic_algorithm(maze, start, goal, checkpoints, mutation_rate, max_iter)
-    A_star(maze, start, order[0])
+    order = [x - 1 for x in order]  # chuyển đổi từ 1-based index sang 0-based index
+    path = A_star(maze, start, checkpoints[order[0]])    
+    
+    # Tạo đường đi giữa các checkpoints
     for i in range(len(order) - 1):
-        A_star(maze, order[i], order[i + 1])
-    A_star(maze, order[-1], goal)
+        segment = A_star(maze, checkpoints[order[i]], checkpoints[order[i + 1]])
+        path.extend(segment[1:])  # Bỏ phần tử đầu để tránh trùng lặp
+    
+    # Tạo đường đi từ checkpoint cuối cùng đến goal
+    final_segment = A_star(maze, checkpoints[order[-1]], goal)
+    path.extend(final_segment[1:])  # Bỏ phần tử đầu để tránh trùng lặp
+    
+    return path
+	
 
 
