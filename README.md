@@ -34,12 +34,14 @@ Chế độ 2:
     - Kiểm soát các lệnh chạy các thuật toán trong chế độ 2
 
 ### `Cost_matrix.py`
+    - Hàm tính toán chi phí đường đi thực sự từ một nút đến tất cả các checkpoints còn lại bằng BFS
 
 ### `Draw_manager.py`
     - Tổng hợp các lệnh những thứ xuất hiện trên màn hình ở cả 2 chế độ
 
 ### `Easy.py`
-    - Tổng hợp các thuật toán cơ bản trong đồ thị (BFS, DFS, Greedy, A*)
+    - So sánh các thuật toán tìm kiếm đường đi cơ bản (BFS, DFS, Greedy, A*) giữa 2 vị trí
+      bất kì trong mê cung về thời gian và độ chính xác về đường đi ngắn nhất  
 
 ### `event_handler.py`
     - Các lệnh để out màn hình, chuyển màn
@@ -52,10 +54,15 @@ Chế độ 2:
     - Quản lý trò chơi bao gồm những biến cần thiết cho trò chơi
     
 ### `Genetic_Algorithm_With_Astar.py`
-    - Thuật toán AI
+    - Mô phỏng quá trình chọn lọc tự nhiên, thuật toán heuristic này sẽ cho thứ tự 
+      các nút đủ tốt so với đáp án tối ưu về mặt chi phí đường đi khi số lượng điểm đi qua
+      là lớn và thuật toán chính xác không thể tìm được kết quả trong thời gian có ý nghĩa
 
 ### `Hill_Climbing_With_Astar.py`
-    - Thuật toán AI
+    - Thuật toán này sẽ trả về một kết quả tối ưu địa phương nhưng mắc kẹt ở điểm tối ưu địa phương và
+      không thể cho một kết quả tối ưu toàn cục
 
 ### `Simulated_Annealing_With_Astar.py`
-    - Thuật toán AI
+    - Mô phỏng quá trình luyện thép khi sử dụng nhiệt độ nóng chảy giảm dần theo thời gian, thuật toán sẽ chấp
+      nhận các kết quả tồi ở giai đoạn đầu và giảm dần theo thời gian để thoát khỏi các điểm tối ưu cục bộ như
+      hill climbing
