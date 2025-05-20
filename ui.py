@@ -2,12 +2,16 @@ import pygame
 import time
 from colors_and_fonts import *
 
+import math
 pygame.init()
+
+FONT = pygame.font.Font("assets/fonts/Tektur-Regular.ttf", 36)
+clock = pygame.time.Clock()
 
 # Kích thước ô cho người chơi và AI
 GRID_SIZE = 70
-CELL_SIZE_PLAYER = 12
-CELL_SIZE_AI = 10
+CELL_SIZE_PLAYER = 13
+CELL_SIZE_AI = 9.5
 
 # Kích thước màn hình
 INFO = pygame.display.Info()
@@ -22,10 +26,10 @@ MATRIX_WIDTH_AI = GRID_SIZE * CELL_SIZE_AI
 MATRIX_HEIGHT_AI = GRID_SIZE * CELL_SIZE_AI
 
 # Khoảng cách và căn giữa
-BORDER_WIDTH = 6
-GAP_BETWEEN_MATRICES = 100
+BORDER_WIDTH = 10
+GAP_BETWEEN_MATRICES = 30
 COMMENT_HEIGHT = 120
-HEADING_GAP = 40
+HEADING_GAP = 80
 
 TOTAL_WIDTH = MATRIX_WIDTH_PLAYER + MATRIX_WIDTH_AI + 2 * BORDER_WIDTH + GAP_BETWEEN_MATRICES
 START_X = (SCREEN_WIDTH - TOTAL_WIDTH) // 2
@@ -33,7 +37,7 @@ START_Y = (SCREEN_HEIGHT - MATRIX_HEIGHT_PLAYER - 2 * BORDER_WIDTH - COMMENT_HEI
 
 PLAYER_POS = (START_X, START_Y)
 AI_POS = (START_X + MATRIX_WIDTH_PLAYER + 2 * BORDER_WIDTH + GAP_BETWEEN_MATRICES, 
-          START_Y + (MATRIX_HEIGHT_PLAYER - MATRIX_HEIGHT_AI) // 2)
+          START_Y + (MATRIX_HEIGHT_PLAYER - MATRIX_HEIGHT_AI) // 2 + 20)
 
 BLINK_INTERVAL = 500  # Nhấp nháy mỗi 500ms
 
@@ -42,73 +46,6 @@ def draw_countdown_corner(screen, remaining_time, font, screen_width, screen_hei
     """Vẽ thời gian đếm ngược ở góc phải dưới màn hình"""
     countdown_text = font.render(f"Time: {remaining_time}s", True, (255, 255, 255))
     screen.blit(countdown_text, (screen_width - 170, screen_height - 50))
-    
-def draw_countdown_and_start_center(screen, duration, font, screen_width, screen_height):
-    """Hiển thị đếm ngược và chữ START! chính giữa màn hình"""
-    start_time = time.time()
-
-    while time.time() - start_time < duration:
-        remaining_time = int(duration - (time.time() - start_time))
-
-        # Xử lý sự kiện để không làm game bị đơ
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
-                pygame.quit()
-                exit()
-
-        screen.fill((0, 0, 0))  # Xóa màn hình trước khi vẽ lại
-        countdown_text = font.render(str(remaining_time), True, (255, 255, 255))
-        text_rect = countdown_text.get_rect(center=(screen_width // 2, screen_height // 2))
-        screen.blit(countdown_text, text_rect)
-        pygame.display.flip()
-        pygame.time.delay(1000)  # Delay 1 giây để cập nhật countdown
-
-    # Hiển thị chữ START! chính giữa màn hình trong 2 giây
-    screen.fill((0, 0, 0))  # Xóa màn hình
-    start_text = font.render("START!", True, (255, 255, 255))
-    text_rect = start_text.get_rect(center=(screen_width // 2, screen_height // 2))
-    screen.blit(start_text, text_rect)
-    pygame.display.flip()
-    time.sleep(1)  # Giữ "START!" trong 2 giây
-
-def draw_countdown_and_start_corner(screen, duration, font, screen_width, screen_height, maze, start_pos, goal_pos, scattered_points, ai_scattered_points, score, target_score):
-    """Vẽ đếm ngược & chữ 'START!' ở góc phải dưới màn hình"""
-    start_time = time.time()
-
-    while time.time() - start_time < duration:
-        remaining_time = int(duration - (time.time() - start_time))
-
-        # Xử lý sự kiện để không làm game bị đơ
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
-                pygame.quit()
-                exit()
-
-        screen.fill((0, 0, 0))  # Xóa màn hình trước khi vẽ lại
-        draw_maze(screen, maze, (50, 50), (255, 255, 255), 10, start_pos, goal_pos, start_pos, start_pos, set(), scattered_points)  # Vẽ lại bản đồ
-        draw_score(screen, score, target_score)  # Hiển thị điểm số
-
-        draw_countdown_corner(screen, remaining_time, font, screen_width, screen_height)  # Hiển thị countdown
-        pygame.display.flip()
-        pygame.time.delay(1000)  # Delay 1 giây
-
-    # **Sau khi đếm ngược kết thúc, vẽ lại bản đồ để giữ màn hình**
-    screen.fill((0, 0, 0))  
-    draw_maze(screen, maze, (50, 50), (255, 255, 255), 10, start_pos, goal_pos, start_pos, start_pos, set(), scattered_points)  # Vẽ lại bản đồ
-    draw_score(screen, score, target_score)  # Hiển thị điểm số
-
-    # **Hiển thị chữ "START!" mà không xóa màn hình**
-    start_text = font.render("START!", True, (255, 255, 255))
-    screen.blit(start_text, (screen_width - 120, screen_height - 100))
-    pygame.display.flip()
-    time.sleep(2)  # Giữ "START!" trong 2 giây
-
-    # **Sau 2 giây, vẽ lại bản đồ để xóa chữ "START!"**
-    screen.fill((0, 0, 0))  
-    draw_maze(screen, maze, (50, 50), (255, 255, 255), 10, start_pos, goal_pos, start_pos, start_pos, set(), scattered_points)  # Vẽ lại bản đồ
-    draw_score(screen, score, target_score)  # Hiển thị điểm số
-    pygame.display.flip()
-
 
 def draw_you_win(screen):
     """Hiển thị YOU WIN! nhấp nháy"""
@@ -147,13 +84,41 @@ def draw_maze(screen, maze, pos, border_color, cell_size, start, end, player_pos
             pygame.draw.rect(screen, color, cell_rect)
 
             # Nếu ô này chứa điểm, vẽ điểm lên trên
-            if (x, y) in scattered_points:
+            if scattered_points is not None and (x, y) in scattered_points:
                 point_value = scattered_points[(x, y)]
                 point_color = POINT_COLORS.get(point_value, (255, 255, 255))
-                pygame.draw.circle(screen, point_color,
-                                   (cell_rect[0] + cell_size // 2, cell_rect[1] + cell_size // 2),
-                                   int(cell_size * 0.45))  # Kích thước điểm
 
+                cx = cell_rect[0] + cell_size // 2  # Tọa độ trung tâm x
+                cy = cell_rect[1] + cell_size // 2  # Tọa độ trung tâm y
+                r = int(cell_size * 0.45)           # Độ dài từ tâm đến đỉnh
+
+                # Tọa độ 4 đỉnh hình kim cương (trên, phải, dưới, trái)
+                diamond_points = [
+                    (cx, cy - r),  # Đỉnh trên
+                    (cx + r, cy),  # Đỉnh phải
+                    (cx, cy + r),  # Đỉnh dưới
+                    (cx - r, cy)   # Đỉnh trái
+                ]
+
+                pygame.draw.polygon(screen, point_color, diamond_points)
+
+def draw_maze_AI(screen, maze, pos, border_color, cell_size):
+    x_offset, y_offset = pos
+    pygame.draw.rect(screen, border_color,
+                     (x_offset - BORDER_WIDTH, y_offset - BORDER_WIDTH,
+                      GRID_SIZE * cell_size + 2 * BORDER_WIDTH, GRID_SIZE * cell_size + 2 * BORDER_WIDTH))
+
+    for x in range(GRID_SIZE):
+        for y in range(GRID_SIZE):
+            cell_rect = (x_offset + x * cell_size, y_offset + y * cell_size, cell_size, cell_size)
+
+            if maze[x][y] == 1:
+                color = MATRIX_COLOR
+            else:
+                color = PATH_COLOR
+
+            # Vẽ ô vuông cho mê cung
+            pygame.draw.rect(screen, color, cell_rect)
 
 def draw_text(screen, text, x, y, font_size=36):
     """Vẽ chữ"""
@@ -169,22 +134,7 @@ def draw_headings(screen):
     heading_ai = START_Y + 110
     draw_text(screen, "PLAYER", human_x, heading_human)
     draw_text(screen, "AI", ai_x, heading_ai)
-
-def draw_comments(screen):
-    """Vẽ chú thích điểm"""
-    x_offset = START_X
-    y_offset = SCREEN_HEIGHT - COMMENT_HEIGHT + 40
-    for i, (points, color) in enumerate(POINT_COLORS.items()):
-        text = small_font.render(f"{points}", True, WHITE)
-        screen.blit(text, (x_offset, y_offset))
-        pygame.draw.rect(screen, color, (x_offset + 60, y_offset + 8, 20, 20))
-        x_offset += 100
-
-def draw_next_level_message(screen, current_level):
-    """Hiển thị thông báo khi hoàn thành level"""
-    text = f"Level {current_level} Complete! Press SPACE for Next"
-    draw_text(screen, text, SCREEN_WIDTH // 2, SCREEN_HEIGHT - 50, 30)
-
+    
 def draw_exit_message(screen):
     """Hiển thị thông báo thoát game"""
     draw_text(screen, "Press ESC to exit", 100, 30, 20)
@@ -198,3 +148,52 @@ def draw_not_enough(screen):
     """Hiển thị thông báo không đủ điểm"""
     text = f"Score is not enough!!!"
     draw_text(screen, text, SCREEN_WIDTH // 2, SCREEN_HEIGHT - 50, 30)
+
+def countdown(screen, duration, centered=False, maze=None, start_pos=None, goal_pos=None, scattered_points=None, ai_scattered_points=None, score=None, target_score=None):
+    """Hàm chung cho đếm ngược trước khi chơi."""
+    start_time = time.time()
+    
+    while time.time() - start_time < duration:
+        remaining_time = int(duration - (time.time() - start_time))
+        blink_state = (pygame.time.get_ticks() // 500) % 2  # Trạng thái nhấp nháy
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
+                pygame.quit()
+                exit()
+
+        screen.fill(BLACK)
+        
+        if maze is not None:  # Nếu có bản đồ, hiển thị bản đồ
+            draw_headings(screen)
+            draw_maze(screen, maze, PLAYER_POS, BORDER_COLOR_PLAYER, CELL_SIZE_PLAYER, start_pos, goal_pos, start_pos, start_pos, set(), scattered_points, blink_state)
+            draw_maze(screen, maze, AI_POS, BORDER_COLOR_AI, CELL_SIZE_AI, start_pos, goal_pos, start_pos, start_pos, set(), ai_scattered_points, blink_state)
+            draw_score(screen, score, target_score)
+            
+            # Đếm ngược góc phải dưới khi xem bản đồ
+            countdown_text = FONT.render(f"Time: {remaining_time}s", True, (255, 255, 255))
+            screen.blit(countdown_text, (SCREEN_WIDTH - 170, SCREEN_HEIGHT - 50))
+        
+        if centered:  # Nếu cần hiển thị ở giữa màn hình
+            draw_text(screen, str(remaining_time), SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, 80)
+
+        pygame.display.flip()
+        clock.tick(30)
+    
+    if centered:
+        screen.fill(BLACK)
+        draw_text(screen, "START!", SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, 80)
+        pygame.display.flip()
+        time.sleep(1)
+
+def draw_next_level_message(screen, current_level):
+    """Hiển thị thông báo khi hoàn thành level"""
+    text = f"Level {current_level} Complete! Press SPACE for Next"
+    draw_text(screen, text, SCREEN_WIDTH // 2, SCREEN_HEIGHT - 50, 30)
+
+
+def draw_time(screen, algorithm, time, path, x, y, font_size=30):
+    """Hiển thị thời gian thực hiện thuật toán tại vị trí (x, y)"""
+    text = f"{algorithm}: {time:.8f}s {path}"
+    text_surface = pygame.font.Font(FONT_PATH, font_size).render(text, True, WHITE)
+    screen.blit(text_surface, (x, y))
