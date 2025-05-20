@@ -20,12 +20,17 @@ class GameState:
         ]
         self.current_level = 1
         self.win = False
+        self.read_map = False
         self.load_level()
 
         self.bfs_time = None
         self.dfs_time = None
         self.greedy_time = None
         self.Astar_time = None
+        self.bfs_path = 0
+        self.dfs_path = 0
+        self.greedy_path = 0
+        self.Astar_path = 0
 
     def reset(self):
         self.maze = None

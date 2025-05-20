@@ -18,7 +18,7 @@ def BFS_solve(screen, maze, start, goal, scattered_points, pos, border_color, ce
         visited_cells.add(current)
 
         # Cập nhật maze: đánh dấu đã đi
-        maze[current[0]][current[1]] = 2  # Giả sử 2 là đường trắng
+        maze[current[0]][current[1]] = 2 
 
         # Vẽ lại màn hình
         draw_maze(screen, maze, pos, border_color, cell_size, start, goal, current, current, visited_cells, scattered_points, blink_state=True)
@@ -50,7 +50,7 @@ def DFS_solve(screen, maze, start, goal, scattered_points, pos, border_color, ce
     while stack:
         current = stack.pop()
         visited_cells.add(current)
-        maze[current[0]][current[1]] = 2  # Giả sử 2 là đường trắng
+        maze[current[0]][current[1]] = 2  
 
         draw_maze(screen, maze, pos, border_color, cell_size, start, goal, current, current, visited_cells, scattered_points, blink_state=True)
         pygame.display.update()
