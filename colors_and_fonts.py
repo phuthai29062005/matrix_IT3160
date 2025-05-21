@@ -34,11 +34,19 @@ BORDER_COLOR_AI = tuple(colors["border_colors_ai"][index])
 PATH_COLOR = tuple(colors["path_colors"][index])
 
 # Màu nền và chữ và vị trí đầu cuối
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
 START_COLOR = (255, 165, 0)  # Màu cam
 GOAL_COLOR = [139, 69, 19]  # Màu vàng
-
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+BLUE = (0, 100, 255)
+LIGHT_BLUE = (100, 200, 255)
+DARK_BLUE = (0, 50, 150)
+GREEN = (0, 200, 100)
+LIGHT_GREEN = (100, 255, 150)
+DARK_GREEN = (0, 150, 50)
+PURPLE = (150, 50, 200)
+LIGHT_PURPLE = (200, 100, 255)
+DARK_PURPLE = (100, 0, 150)
 
 # Bảng điểm
 POINT_COLORS = {

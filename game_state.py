@@ -45,6 +45,10 @@ class GameState:
         self.player_pos = None
         self.ai_pos = None
     
+    def reset_game(self):
+        """Reset toàn bộ trạng thái game khi quay về menu"""
+        self.__init__()  # Gọi lại hàm khởi tạo ban đầu
+
     def load_level(self):
         # Load dữ liệu cho level hiện tại
         idx = self.current_level - 1

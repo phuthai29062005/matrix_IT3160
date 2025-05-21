@@ -5,8 +5,8 @@ from game_state import GameState
 from Easy import *
 from ui import *
 
-def choose_position(screen, state):
-    for event in pygame.event.get():
+def choose_position(screen, state, events):
+    for event in events:
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
