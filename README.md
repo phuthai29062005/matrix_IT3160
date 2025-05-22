@@ -37,7 +37,8 @@ Chế độ 3:
     - Load thông tin từ file `colors.json`.
 
 ### `compare.py`
-    - Kiểm soát các lệnh chạy các thuật toán trong chế độ 2
+    - Chọn vị trí đầu cuối
+    - Kiểm soát các lệnh chạy các thuật toán trong chế độ 2, 3
 
 ### `Cost_matrix.py`
     - Hàm tính toán chi phí đường đi thực sự từ một nút đến tất cả các checkpoints còn lại bằng BFS
