@@ -6,7 +6,7 @@ def draw_everything_true(screen, state, blink_state):
     screen.fill(BLACK)  # Đặt nền đen
 
     if state.read_map == False:
-        countdown(screen, 15, False, state.maze, state.start_pos, state.goal_pos, state.scattered_points, state.ai_scattered_points, state.score, state.target_score)
+        countdown(screen, 5, False, state.maze, state.start_pos, state.goal_pos, state.scattered_points, state.ai_scattered_points, state.score, state.target_score)
         state.read_map = True
 
     draw_headings(screen)  # Vẽ tiêu đề game
@@ -53,13 +53,12 @@ def draw_everything_false(screen, state):
     if state.Astar_time is not None:
         draw_time(screen, "A_star", state.Astar_time, state.Astar_path, SCREEN_WIDTH - 500, 220)
         
-def draw_path(screen, path, color):
-    for pos in path:
-        x = pos[1] * CELL_SIZE_PLAYER + PLAYER_POS[0] + CELL_SIZE_PLAYER // 2
-        y = pos[0] * CELL_SIZE_PLAYER + PLAYER_POS[1] + CELL_SIZE_PLAYER // 2
-        pygame.draw.circle(screen, color, (x, y), 3)
-
-def draw_ai_position(screen, pos, color):
-    x = pos[1] * CELL_SIZE_PLAYER + PLAYER_POS[0] + CELL_SIZE_PLAYER // 2
-    y = pos[0] * CELL_SIZE_PLAYER + PLAYER_POS[1] + CELL_SIZE_PLAYER // 2
-    pygame.draw.circle(screen, color, (x, y), 10)
+    if state.Hill_path != 0:
+        draw_time(screen, "Hill", 0, state.Hill_path, SCREEN_WIDTH - 500, 100)
+        
+    if state.Star_path != 0:
+        draw_time(screen, "Star", 0, state.Star_path, SCREEN_WIDTH - 500, 140)
+    
+    if state.Simulated_path != 0:
+        draw_time(screen, "Simulated", 0, state.Simulated_path, SCREEN_WIDTH - 500, 180)
+    

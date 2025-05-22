@@ -7,6 +7,7 @@ from ui import *
 from Hill_Climbing_With_Astar import *
 from Simulated_Annealing_With_Astar import *
 from Genetic_Algorithm_With_Astar import *
+from game_logic import *
 
 def choose_position(screen, state, events):
     for event in events:
@@ -49,12 +50,7 @@ def compare_maze(screen, state):
         maze_copy_for_dfs = copy.deepcopy(state.maze)
         maze_copy_for_greedy = copy.deepcopy(state.maze)
         maze_copy_for_Astar = copy.deepcopy(state.maze)
-
-        # Tọa độ để hiển thị thời gian (bên phải màn hình)
-        time_display_x = SCREEN_WIDTH - 300  # Điều chỉnh vị trí theo nhu cầu
-        time_display_y_start = 100  # Bắt đầu từ vị trí này và tăng dần cho mỗi thuật toán
-
-        
+    
         start = time.perf_counter()
         state.bfs_path = BFS_solve(screen, maze_copy_for_bfs, state.start_pos, state.goal_pos, state.scattered_points, PLAYER_POS, BORDER_COLOR_PLAYER, CELL_SIZE_PLAYER)
         end = time.perf_counter()
@@ -76,12 +72,31 @@ def compare_maze(screen, state):
         state.Astar_time = round(end - start, 8)
         
     else:
-        checkpoints = list(state.ai_scattered_points.keys()) 
-        state.Astar_path = hill_climbing_Astar(state.maze, state.start_pos, state.goal_pos, checkpoints)
-        print("đã chạy xong hill", len(state.Astar_path))
-        state.Astar_path = ga_Astar(state.maze, state.start_pos, state.goal_pos, checkpoints)
-        print("đã chạy xong a*", len(state.Astar_path))
-    
-        state.ai_path = simulated_annealing_Astar(state.maze, state.start_pos, state.goal_pos, checkpoints)
-        print("đã chạy xong simulated", len(state.Astar_path))
+        if len(state.ai_path) == 0 or state.player_pos == state.goal_pos:
+            checkpoints = list(state.ai_scattered_points.keys())
+            if state.level == 1:
+                state.ai_path = hill_climbing_Astar(state.maze, state.player_pos, state.goal_pos, checkpoints)
+                state.Hill_path = len(state.ai_path)
+            elif state.level == 2:
+                state.ai_path = ga_Astar(state.maze, state.player_pos, state.goal_pos, checkpoints)
+                state.Star_path = len(state.ai_path)
+            elif state.level == 3:
+                state.ai_path = simulated_annealing_Astar(state.maze, state.player_pos, state.goal_pos, checkpoints)
+                state.Simulated_path = len(state.ai_path)
+        state.player_pos, state.ai_last_move_time = move_ai(
+            state.maze, 
+            state.player_pos, 
+            state.goal_pos, 
+            state.ai_path, 
+            state.ai_last_move_time, 
+            state.ai_move_delay
+        )
+        #print(state.level)
+        state.visited_cells.add(state.player_pos)
         
+        # In compare_maze, modify the level transition:
+        if len(state.ai_path) == 0:
+            state.level += 1
+            state.visited_cells = set()  # Reset properly
+            state.player_pos = state.start_pos
+            state.ai_path = []  # Clear old path

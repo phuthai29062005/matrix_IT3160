@@ -30,8 +30,12 @@ class GameState:
         self.bfs_path = 0
         self.dfs_path = 0
         self.greedy_path = 0
+        self.Hill_path = 0
         self.Astar_path = 0
-
+        self.Star_path = 0
+        self.Simulated_path = 0
+        self.level = 1
+        
     def reset(self):
         self.maze = None
         self.start_pos = None
@@ -69,6 +73,6 @@ class GameState:
         self.ai_path = []
 
         self.last_move_time = time.time()
-        self.move_delay = 0.05
+        self.move_delay = 0.03
         self.ai_last_move_time = time.time()
-        self.ai_move_delay = 0.3
+        self.ai_move_delay = 0.5

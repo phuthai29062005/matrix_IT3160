@@ -77,7 +77,7 @@ def draw_maze(screen, maze, pos, border_color, cell_size, start, end, player_pos
                 color = (255, 0, 0) if blink_state else PATH_COLOR  # Nhấp nháy vị trí người chơi
             elif (x, y) == last_player_pos:
                 color = (0, 255, 255) if blink_state else PATH_COLOR  # Nhấp nháy vị trí cuối cùng
-            elif (x, y) in visited_cells:
+            elif visited_cells is not None and (x, y) in visited_cells:
                 color = WHITE  # Đường đã đi
             else:
                 color = PATH_COLOR  # Đường đi
@@ -285,3 +285,26 @@ class Button:
                 self.click_effect = True
                 self.click_time = pygame.time.get_ticks()
                 self.callback()
+
+def draw_path(screen, path, color):
+    """Vẽ đường đi dạng các chấm tròn nối liền nhau"""
+    if not path:
+        return
+    
+    # Vẽ từng điểm trên path
+    for i in range(len(path) - 1):
+        x1 = path[i][1] * CELL_SIZE_PLAYER + PLAYER_POS[0] + CELL_SIZE_PLAYER // 2
+        y1 = path[i][0] * CELL_SIZE_PLAYER + PLAYER_POS[1] + CELL_SIZE_PLAYER // 2
+        x2 = path[i+1][1] * CELL_SIZE_PLAYER + PLAYER_POS[0] + CELL_SIZE_PLAYER // 2
+        y2 = path[i+1][0] * CELL_SIZE_PLAYER + PLAYER_POS[1] + CELL_SIZE_PLAYER // 2
+        
+        # Vẽ đường nối giữa các điểm
+        pygame.draw.line(screen, color, (x1, y1), (x2, y2), 3)
+        
+        # Vẽ chấm tròn tại mỗi điểm
+        pygame.draw.circle(screen, color, (x1, y1), 4)
+    
+    # Vẽ điểm cuối cùng
+    last_x = path[-1][1] * CELL_SIZE_PLAYER + PLAYER_POS[0] + CELL_SIZE_PLAYER // 2
+    last_y = path[-1][0] * CELL_SIZE_PLAYER + PLAYER_POS[1] + CELL_SIZE_PLAYER // 2
+    pygame.draw.circle(screen, color, (last_x, last_y), 4)
