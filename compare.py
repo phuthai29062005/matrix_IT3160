@@ -4,6 +4,9 @@ import time
 from game_state import GameState
 from Easy import *
 from ui import *
+from Hill_Climbing_With_Astar import *
+from Simulated_Annealing_With_Astar import *
+from Genetic_Algorithm_With_Astar import *
 
 def choose_position(screen, state, events):
     for event in events:
@@ -40,35 +43,45 @@ def choose_position(screen, state, events):
                         compare_maze(screen, state)
                             
 def compare_maze(screen, state):
-    maze_copy_for_bfs = copy.deepcopy(state.maze)
-    maze_copy_for_dfs = copy.deepcopy(state.maze)
-    maze_copy_for_greedy = copy.deepcopy(state.maze)
-    maze_copy_for_Astar = copy.deepcopy(state.maze)
+    if len(state.scattered_points) == 0:
+        
+        maze_copy_for_bfs = copy.deepcopy(state.maze)
+        maze_copy_for_dfs = copy.deepcopy(state.maze)
+        maze_copy_for_greedy = copy.deepcopy(state.maze)
+        maze_copy_for_Astar = copy.deepcopy(state.maze)
 
-    # Tọa độ để hiển thị thời gian (bên phải màn hình)
-    time_display_x = SCREEN_WIDTH - 300  # Điều chỉnh vị trí theo nhu cầu
-    time_display_y_start = 100  # Bắt đầu từ vị trí này và tăng dần cho mỗi thuật toán
+        # Tọa độ để hiển thị thời gian (bên phải màn hình)
+        time_display_x = SCREEN_WIDTH - 300  # Điều chỉnh vị trí theo nhu cầu
+        time_display_y_start = 100  # Bắt đầu từ vị trí này và tăng dần cho mỗi thuật toán
 
-    
-    start = time.perf_counter()
-    state.bfs_path = BFS_solve(screen, maze_copy_for_bfs, state.start_pos, state.goal_pos, None, PLAYER_POS, BORDER_COLOR_PLAYER, CELL_SIZE_PLAYER)
-    end = time.perf_counter()
-    
-    state.bfs_time = round(end - start, 8)
-    
-    start = time.perf_counter()
-    state.dfs_path = DFS_solve(screen, maze_copy_for_dfs, state.start_pos, state.goal_pos, None, PLAYER_POS, BORDER_COLOR_PLAYER, CELL_SIZE_PLAYER)
-    end = time.perf_counter()
-    state.dfs_time = round(end - start, 8)
-    
-    start = time.perf_counter()
-    state.greedy_path = GreedyBestFirst_solve(screen, maze_copy_for_greedy, state.start_pos, state.goal_pos, None, PLAYER_POS, BORDER_COLOR_PLAYER, CELL_SIZE_PLAYER)
-    end = time.perf_counter()
-    state.greedy_time = round(end - start, 8)
+        
+        start = time.perf_counter()
+        state.bfs_path = BFS_solve(screen, maze_copy_for_bfs, state.start_pos, state.goal_pos, state.scattered_points, PLAYER_POS, BORDER_COLOR_PLAYER, CELL_SIZE_PLAYER)
+        end = time.perf_counter()
+        state.bfs_time = round(end - start, 8)
+        
+        start = time.perf_counter()
+        state.dfs_path = DFS_solve(screen, maze_copy_for_dfs, state.start_pos, state.goal_pos, state.scattered_points, PLAYER_POS, BORDER_COLOR_PLAYER, CELL_SIZE_PLAYER)
+        end = time.perf_counter()
+        state.dfs_time = round(end - start, 8)
+        
+        start = time.perf_counter()
+        state.greedy_path = GreedyBestFirst_solve(screen, maze_copy_for_greedy, state.start_pos, state.goal_pos, state.scattered_points, PLAYER_POS, BORDER_COLOR_PLAYER, CELL_SIZE_PLAYER)
+        end = time.perf_counter()
+        state.greedy_time = round(end - start, 8)
 
-    start = time.perf_counter()
-    state.Astar_path = A_star_solve(screen, maze_copy_for_Astar, state.start_pos, state.goal_pos, None, PLAYER_POS, BORDER_COLOR_PLAYER, CELL_SIZE_PLAYER, True)
+        start = time.perf_counter()
+        state.Astar_path = A_star_solve(screen, maze_copy_for_Astar, state.start_pos, state.goal_pos, state.scattered_points, PLAYER_POS, BORDER_COLOR_PLAYER, CELL_SIZE_PLAYER, True)
+        end = time.perf_counter()
+        state.Astar_time = round(end - start, 8)
+        
+    else:
+        checkpoints = list(state.ai_scattered_points.keys()) 
+        state.Astar_path = hill_climbing_Astar(state.maze, state.start_pos, state.goal_pos, checkpoints)
+        print("đã chạy xong hill", len(state.Astar_path))
+        state.Astar_path = ga_Astar(state.maze, state.start_pos, state.goal_pos, checkpoints)
+        print("đã chạy xong a*", len(state.Astar_path))
     
-    end = time.perf_counter()
-    state.Astar_time = round(end - start, 8)
-
+        state.ai_path = simulated_annealing_Astar(state.maze, state.start_pos, state.goal_pos, checkpoints)
+        print("đã chạy xong simulated", len(state.Astar_path))
+        

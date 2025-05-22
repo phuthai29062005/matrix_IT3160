@@ -104,7 +104,7 @@ def draw_maze(screen, maze, pos, border_color, cell_size, start, end, player_pos
 
                 pygame.draw.polygon(screen, point_color, diamond_points)
 
-def draw_maze_AI(screen, maze, pos, border_color, cell_size):
+def draw_maze_AI(screen, maze, pos, border_color, cell_size, scattered_points):
     x_offset, y_offset = pos
     pygame.draw.rect(screen, border_color,
                      (x_offset - BORDER_WIDTH, y_offset - BORDER_WIDTH,
@@ -121,6 +121,24 @@ def draw_maze_AI(screen, maze, pos, border_color, cell_size):
 
             # Vẽ ô vuông cho mê cung
             pygame.draw.rect(screen, color, cell_rect)
+            
+            if scattered_points is not None and (x, y) in scattered_points:
+                point_value = scattered_points[(x, y)]
+                point_color = POINT_COLORS.get(point_value, (255, 255, 255))
+
+                cx = cell_rect[0] + cell_size // 2  # Tọa độ trung tâm x
+                cy = cell_rect[1] + cell_size // 2  # Tọa độ trung tâm y
+                r = int(cell_size * 0.45)           # Độ dài từ tâm đến đỉnh
+
+                # Tọa độ 4 đỉnh hình kim cương (trên, phải, dưới, trái)
+                diamond_points = [
+                    (cx, cy - r),  # Đỉnh trên
+                    (cx + r, cy),  # Đỉnh phải
+                    (cx, cy + r),  # Đỉnh dưới
+                    (cx - r, cy)   # Đỉnh trái
+                ]
+
+                pygame.draw.polygon(screen, point_color, diamond_points)
 
 def draw_text(screen, text, x, y, font_size=36):
     """Vẽ chữ"""

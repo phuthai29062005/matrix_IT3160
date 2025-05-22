@@ -52,3 +52,14 @@ def draw_everything_false(screen, state):
 
     if state.Astar_time is not None:
         draw_time(screen, "A_star", state.Astar_time, state.Astar_path, SCREEN_WIDTH - 500, 220)
+        
+def draw_path(screen, path, color):
+    for pos in path:
+        x = pos[1] * CELL_SIZE_PLAYER + PLAYER_POS[0] + CELL_SIZE_PLAYER // 2
+        y = pos[0] * CELL_SIZE_PLAYER + PLAYER_POS[1] + CELL_SIZE_PLAYER // 2
+        pygame.draw.circle(screen, color, (x, y), 3)
+
+def draw_ai_position(screen, pos, color):
+    x = pos[1] * CELL_SIZE_PLAYER + PLAYER_POS[0] + CELL_SIZE_PLAYER // 2
+    y = pos[0] * CELL_SIZE_PLAYER + PLAYER_POS[1] + CELL_SIZE_PLAYER // 2
+    pygame.draw.circle(screen, color, (x, y), 10)

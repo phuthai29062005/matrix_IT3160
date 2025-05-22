@@ -45,7 +45,7 @@ def compare_mode():
     while running:
         clock.tick(30)
         blink_state = (pygame.time.get_ticks() // 500) % 2
-
+  
         if not generate:
             state.reset()
             state.maze = generate_maze()
@@ -61,11 +61,41 @@ def compare_mode():
         screen.fill(BLACK)
 
         if state.maze is not None:
-            draw_maze_AI(screen, state.maze, PLAYER_POS, BORDER_COLOR_PLAYER, CELL_SIZE_PLAYER)
+            draw_maze_AI(screen, state.maze, PLAYER_POS, BORDER_COLOR_PLAYER, CELL_SIZE_PLAYER,)
 
         draw_everything_false(screen, state)
         pygame.display.flip()  # Đã di chuyển lên trước khi kiểm tra sự kiện lần 2
 
+def compare_ai_mode():
+    state = GameState()
+    running = True
+    generate = False
+
+    while running:
+        clock.tick(30)
+        blink_state = (pygame.time.get_ticks() // 500) % 2
+  
+        if not generate:
+            state.reset()
+            state.maze = generate_maze()
+            generate = True
+            
+        events = handle_events(state)  
+        if events == "quit":
+            return "quit"
+        elif events == "menu":
+            return "menu"
+        else:
+            if len(state.scattered_points) == 0:
+                state.scattered_points, state.ai_scattered_points = random_points(state.maze, state.start_pos, state.goal_pos, 2)
+            choose_position(screen, state, events)
+        screen.fill(BLACK)
+
+        if state.maze is not None:
+            draw_maze_AI(screen, state.maze, PLAYER_POS, BORDER_COLOR_PLAYER, CELL_SIZE_PLAYER, state.scattered_points)
+
+        draw_everything_false(screen, state)
+        pygame.display.flip()  # Đã di chuyển lên trước khi kiểm tra sự kiện lần 2
 
 def main():
     while True:
@@ -75,6 +105,8 @@ def main():
             result = play_game()
         elif mode == "compare":
             result = compare_mode()
+        elif mode == "compare_ai":
+            result = compare_ai_mode()
         else:
             break  # Nhấn ESC trong menu chính để thoát
 
