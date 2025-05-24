@@ -26,13 +26,11 @@ def move_ai(maze, ai_pos, goal_pos, ai_path, last_move_time, move_delay):
         if maze[next_pos[0]][next_pos[1]] == 0:
             ai_pos = next_pos
             last_move_time = current_time
-    
+
     return ai_pos, last_move_time
 
 def update_ai(state):
     # Nếu không có đường đi hoặc đã đi hết đường đi
-    print(state.ai_pos)
-    print(state.goal_pos)
     if not state.ai_path or state.ai_pos == state.goal_pos:
         # Tìm đường đi mới
         checkpoints = list(state.ai_scattered_points.keys())  # Get the coordinates (x,y) tuples

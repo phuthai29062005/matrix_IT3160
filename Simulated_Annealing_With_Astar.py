@@ -46,7 +46,7 @@ def simulated_annealing(maze, start, goal, checkpoints, temperature, cooling_rat
 
 	return best_route 
 
-def simulated_annealing_Astar(maze, start, goal, checkpoints, temperature = 300, cooling_rate = 0.97, max_iter = 10000):
+def simulated_annealing_Astar(maze, start, goal, checkpoints, temperature = 1000, cooling_rate = 0.99, max_iter = 100000):
 	order = simulated_annealing(maze, start, goal, checkpoints, temperature, cooling_rate, max_iter)
 	order = [x - 1 for x in order]  # chuyển đổi từ 1-based index sang 0-based index
 
@@ -64,7 +64,6 @@ def simulated_annealing_Astar(maze, start, goal, checkpoints, temperature = 300,
 	return path
 
 	
-
 
 
 

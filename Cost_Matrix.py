@@ -30,8 +30,6 @@ def distance_with_BFS(maze, start, checkpoints): # return list
         if checkpoint in result:
             row_dist.append(result[checkpoint])
         else:
-            # If a checkpoint is unreachable, you might want to handle it
-            # For example, use -1 or float('inf') to indicate unreachable
             row_dist.append(-1)  # or float('inf')
     
     return row_dist
