@@ -6,7 +6,7 @@ def draw_everything_true(screen, state, blink_state):
     screen.fill(BLACK)  # Đặt nền đen
 
     if state.read_map == False:
-        countdown(screen, 5, False, state.maze, state.start_pos, state.goal_pos, state.scattered_points, state.ai_scattered_points, state.score, state.target_score)
+        countdown(screen, 16, False, state.maze, state.start_pos, state.goal_pos, state.scattered_points, state.ai_scattered_points, state.score, state.target_score)
         state.read_map = True
 
     draw_headings(screen)  # Vẽ tiêu đề game

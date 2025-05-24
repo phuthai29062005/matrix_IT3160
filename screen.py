@@ -47,16 +47,17 @@ def compare_ai_mode():
     selected_mode = "compare_ai"
 
 def show_intro():
-    print("Giới thiệu trò chơi: MATRIX MAZE - IT3080")
+    print("Giới thiệu trò chơi: MATRIX MAZE - IT3160")
 
 buttons = [
-    Button("Play", SCREEN_WIDTH//2 - 150, 200, 300, 70, play_game, color=LIGHT_GREEN, hover_color=GREEN),
-    Button("Compare", SCREEN_WIDTH//2 - 150, 300, 300, 70, compare_mode, color=LIGHT_BLUE, hover_color=BLUE),
-    Button("Compare_AI", SCREEN_WIDTH//2 - 150, 400, 300, 70, compare_ai_mode, color=LIGHT_PURPLE, hover_color=PURPLE),
+    
+    Button("Compare", SCREEN_WIDTH//2 - 150, 200, 300, 70, compare_mode, color=LIGHT_BLUE, hover_color=BLUE),
+    Button("Compare_AI", SCREEN_WIDTH//2 - 150, 300, 300, 70, compare_ai_mode, color=LIGHT_PURPLE, hover_color=PURPLE),
+    Button("Play", SCREEN_WIDTH//2 - 150, 400, 300, 70, play_game, color=LIGHT_GREEN, hover_color=GREEN),  
 ]
 
-title_text = title_font.render("MATRIX MAZE - IT3080", True, WHITE)
-title_shadow = title_font.render("MATRIX MAZE - IT3080", True, (50, 50, 50))
+title_text = title_font.render("MATRIX MAZE - IT3160", True, WHITE)
+title_shadow = title_font.render("MATRIX MAZE - IT3160", True, (50, 50, 50))
 
 def show_main_menu():
     global selected_mode

@@ -69,7 +69,7 @@ def compare_mode():
 def compare_ai_mode():
     state = GameState()
     running = True
-    state.current_level = 1
+    state.current_level = 3
     state.load_level()  # Tải dữ liệu level 2
        
     while running:
@@ -78,7 +78,6 @@ def compare_ai_mode():
         blink_state = (pygame.time.get_ticks() // 500) % 2
         if state.visited_cells is None:
             draw_maze(screen, state.maze, PLAYER_POS, BORDER_COLOR_PLAYER, CELL_SIZE_PLAYER, state.start_pos, state.goal_pos, state.start_pos, state.start_pos, state.visited_cells, state.scattered_points, blink_state)
-        print(state.start_pos, state.player_pos)
             
         events = handle_events(state)  
         if events == "quit":
