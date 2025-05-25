@@ -69,7 +69,7 @@ def compare_mode():
 def compare_ai_mode():
     state = GameState()
     running = True
-    state.current_level = 3
+    state.current_level = 2
     state.load_level()  # Tải dữ liệu level 2
        
     while running:

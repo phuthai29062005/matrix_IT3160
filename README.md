@@ -1,7 +1,7 @@
 # Matrix Game - IT3160 🎮
 
 ## Giới thiệu 📜
-Matrix Game là một trò chơi giải mê cung có 3 chế độ được phát triển bằng Python và Pygame. Mục đích giúp xử lý bài toán tìm đường đi tối ưu cho shipper khi gia hàng.
+Matrix Game là một trò chơi giải mê cung có 3 chế độ được phát triển bằng Python và Pygame. Mục đích giúp xử lý bài toán tìm đường đi tối ưu cho bài toán giao hàng hoặc bài toán người du lịch.
 
     Chế độ 1:
         - So sánh thời gian các thuật toán cơ bản chạy trong mê cung (bfs, dfs, greedy, astar).
