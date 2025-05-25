@@ -74,7 +74,10 @@ def genetic_algorithm(maze, start, goal, checkpoints, mutation_rate, max_iter):
     best_route = np.argmin(fitness_population)
     return population[best_route]
 
-def ga_Astar(maze, start, goal, checkpoints, mutation_rate=0.2, max_iter=10000):
+def ga_Astar(maze, start, goal, checkpoints, population_size, elite_rate, mutation_rate, max_iter=10000):
+    #level 1: 130, 0.15, 0.2
+    #level 2: 120, 0.13, 0.22
+    #level 3: 130, 0.1, 0.24
     order = genetic_algorithm(maze, start, goal, checkpoints, mutation_rate, max_iter)
     order = [x - 1 for x in order]  # chuyển đổi từ 1-based index sang 0-based index
     path = A_star(maze, start, checkpoints[order[0]])    
