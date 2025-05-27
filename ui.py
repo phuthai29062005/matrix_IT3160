@@ -41,7 +41,9 @@ AI_POS = (START_X + MATRIX_WIDTH_PLAYER + 2 * BORDER_WIDTH + GAP_BETWEEN_MATRICE
 
 BLINK_INTERVAL = 500  # Nhấp nháy mỗi 500ms
 
-
+font_large = pygame.font.SysFont("arial", 40, bold=True)
+font_small = pygame.font.SysFont("arial", 14)
+                                 
 def draw_countdown_corner(screen, remaining_time, font, screen_width, screen_height):
     """Vẽ thời gian đếm ngược ở góc phải dưới màn hình"""
     countdown_text = font.render(f"Time: {remaining_time}s", True, (255, 255, 255))
@@ -75,7 +77,7 @@ def draw_maze(screen, maze, pos, border_color, cell_size, start, end, player_pos
                 color = (255, 0, 0) if blink_state else PATH_COLOR  # Nhấp nháy vị trí người chơi
             elif (x, y) == last_player_pos:
                 color = (0, 255, 255) if blink_state else PATH_COLOR  # Nhấp nháy vị trí cuối cùng
-            elif (x, y) in visited_cells:
+            elif visited_cells is not None and (x, y) in visited_cells:
                 color = WHITE  # Đường đã đi
             else:
                 color = PATH_COLOR  # Đường đi
@@ -102,7 +104,7 @@ def draw_maze(screen, maze, pos, border_color, cell_size, start, end, player_pos
 
                 pygame.draw.polygon(screen, point_color, diamond_points)
 
-def draw_maze_AI(screen, maze, pos, border_color, cell_size):
+def draw_maze_AI(screen, maze, pos, border_color, cell_size, scattered_points):
     x_offset, y_offset = pos
     pygame.draw.rect(screen, border_color,
                      (x_offset - BORDER_WIDTH, y_offset - BORDER_WIDTH,
@@ -119,6 +121,24 @@ def draw_maze_AI(screen, maze, pos, border_color, cell_size):
 
             # Vẽ ô vuông cho mê cung
             pygame.draw.rect(screen, color, cell_rect)
+            
+            if scattered_points is not None and (x, y) in scattered_points:
+                point_value = scattered_points[(x, y)]
+                point_color = POINT_COLORS.get(point_value, (255, 255, 255))
+
+                cx = cell_rect[0] + cell_size // 2  # Tọa độ trung tâm x
+                cy = cell_rect[1] + cell_size // 2  # Tọa độ trung tâm y
+                r = int(cell_size * 0.45)           # Độ dài từ tâm đến đỉnh
+
+                # Tọa độ 4 đỉnh hình kim cương (trên, phải, dưới, trái)
+                diamond_points = [
+                    (cx, cy - r),  # Đỉnh trên
+                    (cx + r, cy),  # Đỉnh phải
+                    (cx, cy + r),  # Đỉnh dưới
+                    (cx - r, cy)   # Đỉnh trái
+                ]
+
+                pygame.draw.polygon(screen, point_color, diamond_points)
 
 def draw_text(screen, text, x, y, font_size=36):
     """Vẽ chữ"""
@@ -197,3 +217,94 @@ def draw_time(screen, algorithm, time, path, x, y, font_size=30):
     text = f"{algorithm}: {time:.8f}s {path}"
     text_surface = pygame.font.Font(FONT_PATH, font_size).render(text, True, WHITE)
     screen.blit(text_surface, (x, y))
+
+
+class Button:
+    def __init__(self, text, x, y, w, h, callback, color=LIGHT_BLUE, hover_color=BLUE, text_color=WHITE, shadow=True):
+        self.text = text
+        self.rect = pygame.Rect(x, y, w, h)
+        self.callback = callback
+        self.color = color
+        self.hover_color = hover_color
+        self.text_color = text_color
+        self.shadow = shadow
+        self.click_effect = False
+        self.click_time = 0
+        self.border_radius = 15
+        self.glow = 0
+        
+    def draw(self, screen):
+        mouse_pos = pygame.mouse.get_pos()
+        is_hover = self.rect.collidepoint(mouse_pos)
+        
+        if is_hover:
+            self.glow = min(self.glow + 0.2, 10)
+        else:
+            self.glow = max(self.glow - 0.2, 0)
+            
+        click_offset = 0
+        if self.click_effect:
+            click_offset = 3
+            if pygame.time.get_ticks() - self.click_time > 100:
+                self.click_effect = False
+
+        if self.shadow:
+            shadow_rect = pygame.Rect(self.rect.x + 5, self.rect.y + 5 + click_offset, self.rect.width, self.rect.height)
+            pygame.draw.rect(screen, (0, 0, 0, 100), shadow_rect, border_radius=self.border_radius)
+
+        current_color = self.hover_color if is_hover else self.color
+        if self.click_effect:
+            current_color = pygame.Color(*current_color).lerp(WHITE, 0.3)
+
+        pygame.draw.rect(screen, current_color, pygame.Rect(
+            self.rect.x, self.rect.y + click_offset, self.rect.width, self.rect.height), border_radius=self.border_radius)
+
+        border_color = pygame.Color(*current_color).lerp(WHITE, 0.7)
+        pygame.draw.rect(screen, border_color, pygame.Rect(
+            self.rect.x, self.rect.y + click_offset, self.rect.width, self.rect.height), 2, self.border_radius)
+
+        if self.glow > 0:
+            glow_surf = pygame.Surface((self.rect.width, self.rect.height), pygame.SRCALPHA)
+            glow_color = (*current_color[:3], int(self.glow * 10))
+            pygame.draw.rect(glow_surf, glow_color, (0, 0, self.rect.width, self.rect.height), border_radius=self.border_radius)
+            screen.blit(glow_surf, (self.rect.x, self.rect.y + click_offset))
+
+        text_surf = font_large.render(self.text, True, self.text_color)
+        text_rect = text_surf.get_rect(center=(self.rect.centerx, self.rect.centery + click_offset))
+        text_shadow = font_large.render(self.text, True, (0, 0, 0, 100))
+        screen.blit(text_shadow, (text_rect.x + 2, text_rect.y + 2))
+        screen.blit(text_surf, text_rect)
+
+        if is_hover:
+            pygame.draw.circle(screen, WHITE, (self.rect.left + 20, self.rect.centery + click_offset), 3)
+            pygame.draw.circle(screen, WHITE, (self.rect.right - 20, self.rect.centery + click_offset), 3)
+
+    def check_click(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            if self.rect.collidepoint(event.pos):
+                self.click_effect = True
+                self.click_time = pygame.time.get_ticks()
+                self.callback()
+
+def draw_path(screen, path, color):
+    """Vẽ đường đi dạng các chấm tròn nối liền nhau"""
+    if not path:
+        return
+    
+    # Vẽ từng điểm trên path
+    for i in range(len(path) - 1):
+        x1 = path[i][1] * CELL_SIZE_PLAYER + PLAYER_POS[0] + CELL_SIZE_PLAYER // 2
+        y1 = path[i][0] * CELL_SIZE_PLAYER + PLAYER_POS[1] + CELL_SIZE_PLAYER // 2
+        x2 = path[i+1][1] * CELL_SIZE_PLAYER + PLAYER_POS[0] + CELL_SIZE_PLAYER // 2
+        y2 = path[i+1][0] * CELL_SIZE_PLAYER + PLAYER_POS[1] + CELL_SIZE_PLAYER // 2
+        
+        # Vẽ đường nối giữa các điểm
+        pygame.draw.line(screen, color, (x1, y1), (x2, y2), 3)
+        
+        # Vẽ chấm tròn tại mỗi điểm
+        pygame.draw.circle(screen, color, (x1, y1), 4)
+    
+    # Vẽ điểm cuối cùng
+    last_x = path[-1][1] * CELL_SIZE_PLAYER + PLAYER_POS[0] + CELL_SIZE_PLAYER // 2
+    last_y = path[-1][0] * CELL_SIZE_PLAYER + PLAYER_POS[1] + CELL_SIZE_PLAYER // 2
+    pygame.draw.circle(screen, color, (last_x, last_y), 4)
