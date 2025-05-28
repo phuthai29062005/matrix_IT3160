@@ -34,12 +34,12 @@ def update_ai(state):
     if not state.ai_path or state.ai_pos == state.goal_pos:
         # Tìm đường đi mới
         checkpoints = list(state.ai_scattered_points.keys())  # Get the coordinates (x,y) tuples
-        if state.current_level == 1:    
-            state.ai_path = hill_climbing_Astar(state.maze, state.ai_pos, state.goal_pos, checkpoints)
-        elif state.current_level == 2:
-            state.ai_path = ga_Astar(state.maze, state.ai_pos, state.goal_pos, checkpoints)
+        if state.current_level == 2:    
+            state.ai_path = simulated_annealing_Astar(state.maze, state.ai_pos, state.goal_pos, checkpoints, 2300, 0.99, 100000)
+        elif state.current_level == 1:
+            state.ai_path = simulated_annealing_Astar(state.maze, state.ai_pos, state.goal_pos, checkpoints, 1400, 0.99, 100000)
         elif state.current_level == 3:
-            state.ai_path = simulated_annealing_Astar(state.maze, state.ai_pos, state.goal_pos, checkpoints)
+            state.ai_path = simulated_annealing_Astar(state.maze, state.ai_pos, state.goal_pos, checkpoints, 2700, 0.96, 100000)
     # Di chuyển AI
     state.ai_pos, state.ai_last_move_time = move_ai(
         state.maze, 
