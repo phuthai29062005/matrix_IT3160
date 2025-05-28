@@ -34,11 +34,11 @@ def choose_position(screen, state, events):
                     if state.start_pos is None:
                         state.start_pos = (row, col)
                         state.maze[row][col] = 0
-                        print(f"Start position set to: {row}, {col}")
+                        #print(f"Start position set to: {row}, {col}")
                     elif state.goal_pos is None and (row, col) != state.start_pos:
                         state.goal_pos = (row, col)
                         state.maze[row][col] = 0
-                        print(f"Goal position set to: {row}, {col}")
+                        #print(f"Goal position set to: {row}, {col}")
                     
                     if state.start_pos and state.goal_pos:
                         compare_maze(screen, state)
@@ -71,18 +71,20 @@ def compare_maze(screen, state):
         end = time.perf_counter()
         state.Astar_time = round(end - start, 8)
         
+        
     else:
-        if len(state.ai_path) == 0 or state.player_pos == state.goal_pos:
+        if len(state.ai_path) == 0:
             checkpoints = list(state.ai_scattered_points.keys())
             if state.level == 1:
                 state.ai_path = hill_climbing_Astar(state.maze, state.player_pos, state.goal_pos, checkpoints)
                 state.Hill_path = len(state.ai_path)
             elif state.level == 2:
-                state.ai_path = ga_Astar(state.maze, state.player_pos, state.goal_pos, checkpoints, 130, 0.15, 0.2)
+                state.ai_path = ga_Astar(state.maze, state.player_pos, state.goal_pos, checkpoints, 130, 0.15, 0.2, 100000)
                 state.Star_path = len(state.ai_path)
             elif state.level == 3:
                 state.ai_path = simulated_annealing_Astar(state.maze, state.player_pos, state.goal_pos, checkpoints, 1400, 0.99, 100000)
                 state.Simulated_path = len(state.ai_path)
+                
         state.player_pos, state.ai_last_move_time = move_ai(
             state.maze, 
             state.player_pos, 

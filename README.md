@@ -1,19 +1,19 @@
 # Matrix Game - IT3160 🎮
 
 ## Giới thiệu 📜
-Matrix Game là một trò chơi giải mê cung có 3 chế độ được phát triển bằng Python và Pygame.
-Chế độ 1:
-    - Người chơi sẽ thi đấu với AI.
-    - Người chơi sẽ điều khiển nhân vật di chuyển trong mê cung và thu thập điểm.
-Chế độ 2: 
-    - So sánh thời gian các thuật toán cơ bản chạy trong mê cung (bfs, dfs, greedy, astar)
-Chế độ 3:
-    - So sánh độ dài đường đi của 3 thuật toán AI
+Matrix Game là một trò chơi giải mê cung có 3 chế độ được phát triển bằng Python và Pygame. Mục đích giúp xử lý bài toán tìm đường đi tối ưu cho bài toán giao hàng hoặc bài toán người du lịch.
+
+    Chế độ 1:
+        - So sánh thời gian các thuật toán cơ bản chạy trong mê cung (bfs, dfs, greedy, astar).
+    Chế độ 2: 
+        - So sánh độ dài đường đi của 3 thuật toán AI.
+    Chế độ 3:
+        - Người chơi sẽ thi đấu với AI.
+        - Người chơi sẽ điều khiển nhân vật di chuyển trong mê cung và thu thập điểm.
 ## Cấu trúc dự án 📂
 
-
 ### `screen.py`
-    - Màn hình chờ
+    - Màn hình chờ.
 
 ### `main.py`
     - Chứa vòng lặp chính của game.
@@ -37,39 +37,55 @@ Chế độ 3:
     - Load thông tin từ file `colors.json`.
 
 ### `compare.py`
-    - Chọn vị trí đầu cuối
-    - Kiểm soát các lệnh chạy các thuật toán trong chế độ 2, 3
+    - Chọn vị trí đầu cuối.
+    - Kiểm soát các lệnh chạy các thuật toán trong chế độ 2.
 
 ### `Cost_matrix.py`
-    - Hàm tính toán chi phí đường đi thực sự từ một nút đến tất cả các checkpoints còn lại bằng BFS
+    - Hàm tính toán chi phí đường đi thực sự từ một nút đến tất cả các checkpoints còn lại bằng BFS.
 
 ### `Draw_manager.py`
-    - Tổng hợp các lệnh những thứ xuất hiện trên màn hình ở cả 2 chế độ
+    - Tổng hợp các lệnh những thứ xuất hiện trên màn hình ở cả 2 chế độ.
 
 ### `Easy.py`
-    - So sánh các thuật toán tìm kiếm đường đi cơ bản (BFS, DFS, Greedy, A*) giữa 2 vị trí
-      bất kì trong mê cung về thời gian và độ chính xác về đường đi ngắn nhất  
+    - Tổng hợp các thuật toán cơ bản trong đồ thị (BFS, DFS, Greedy, A*).
 
 ### `event_handler.py`
-    - Các lệnh để out màn hình, chuyển màn
+    - Các lệnh để out màn hình, chuyển màn.
 
 ### `game_logic.py`
     - Tìm chu trình của AI ở chế độ 1
-    - Cập nhật vị trí hiện tại của người chơi, AI
+    - Cập nhật vị trí hiện tại của người chơi, AI.
 
 ### `game_state.py`
-    - Quản lý trò chơi bao gồm những biến cần thiết cho trò chơi
+    - Quản lý trò chơi bao gồm những biến cần thiết cho trò chơi.
     
 ### `Genetic_Algorithm_With_Astar.py`
     - Mô phỏng quá trình chọn lọc tự nhiên, thuật toán heuristic này sẽ cho thứ tự 
     các nút đủ tốt so với đáp án tối ưu về mặt chi phí đường đi khi số lượng điểm đi qua
-    là lớn và thuật toán chính xác không thể tìm được kết quả trong thời gian có ý nghĩa
+    là lớn và thuật toán chính xác không thể tìm được kết quả trong thời gian có ý nghĩa.
 
 ### `Hill_Climbing_With_Astar.py`
     - Thuật toán này sẽ trả về một kết quả tối ưu địa phương nhưng mắc kẹt ở điểm tối ưu địa phương và
-    không thể cho một kết quả tối ưu toàn cục
+    không thể cho một kết quả tối ưu toàn cục.
 
 ### `Simulated_Annealing_With_Astar.py`
     - Mô phỏng quá trình luyện thép khi sử dụng nhiệt độ nóng chảy giảm dần theo thời gian, thuật toán      
     sẽ chấp nhận các kết quả tồi ở giai đoạn đầu và giảm dần theo thời gian để thoát khỏi các điểm tối 
-    ưu cục bộ như hill climbing
+    ưu cục bộ như hill climbing.
+
+## Sinh viên thực hiện
+    - Sinh viên Trường CNTT-TT Đại học Bách khoa Hà Nội K68:
+        * Trương Quang Huy - 20235113
+        * Nguyễn Đức Quý - 20235207
+        * Nguyễn Văn Phú Thái - 20235214
+        * Nguyễn Thị Thanh - 20235429
+        * Lý Hà Trân Trân - 20235440
+
+
+
+
+
+
+
+
+
