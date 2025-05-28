@@ -214,7 +214,10 @@ def draw_next_level_message(screen, current_level):
 
 def draw_time(screen, algorithm, time, path, x, y, font_size=30):
     """Hiển thị thời gian thực hiện thuật toán tại vị trí (x, y)"""
-    text = f"{algorithm}: {time:.8f}s {path}"
+    if time != 0:
+        text = f"{algorithm}: {time:.8f}s {path}"
+    else:
+        text = f"{algorithm}: {path}"
     text_surface = pygame.font.Font(FONT_PATH, font_size).render(text, True, WHITE)
     screen.blit(text_surface, (x, y))
 

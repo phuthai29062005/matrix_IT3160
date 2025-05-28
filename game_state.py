@@ -75,4 +75,4 @@ class GameState:
         self.last_move_time = time.time()
         self.move_delay = 0.03
         self.ai_last_move_time = time.time()
-        self.ai_move_delay = 0.5
+        self.ai_move_delay = 0.25
